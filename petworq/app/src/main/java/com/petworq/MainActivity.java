@@ -1,7 +1,9 @@
-package com.example.charlietuttle.petworq;
+package com.petworq;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.petworq.charlietuttle.petworq.R;
 
 public class MainActivity extends AppCompatActivity {
 

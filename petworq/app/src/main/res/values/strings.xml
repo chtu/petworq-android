@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">petworq</string>
+    <string name="sign_in">Sign In</string>
 </resources>
