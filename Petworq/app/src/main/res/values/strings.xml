@@ -2,4 +2,6 @@
     <string name="app_name">Petworq</string>
     <string name="facebook_app_id">167343297416735</string>
     <string name="fb_login_protocol_scheme">fb167343297416735</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_out">Sign Out</string>
 </resources>
