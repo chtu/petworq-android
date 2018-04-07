@@ -1,7 +1,19 @@
 <resources>
-    <string name="app_name">Petworq</string>
+    <string name="app_name">PetWorq</string>
     <string name="facebook_app_id">167343297416735</string>
     <string name="fb_login_protocol_scheme">fb167343297416735</string>
     <string name="sign_in">Sign In</string>
-    <string name="sign_out">Sign Out</string>
+
+    <!-- Menu Items -->
+    <string name="sign_out">Sign out</string>
+    <string name="favorite">Favorite</string>
+    <string name="find_your_friends">Find your friends</string>
+    <string name="friends">Friends</string>
+    <string name="settings">Settings</string>
+    <string name="create_new_petworq">Create new petworq</string>
+
+    <!-- Greeting -->
+    <string name="greeting_message_to_not_signed_in">welcome to petworq!</string>
+    <string name="sign_in_message">you will have to sign in to continue.</string>
+    <string name="you_signed_in">You signed in!</string>
 </resources>

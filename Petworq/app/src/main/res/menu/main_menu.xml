@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/friends_menuitem"
+        android:title="@string/friends"
+        />
     <item
         android:id="@+id/create_petworq_menuitem"
-        android:title="@string/favorite"
+        android:title="@string/create_new_petworq"
         />
     <item
         android:id="@+id/settings_menuitem"
@@ -11,5 +16,9 @@
     <item
         android:id="@+id/sign_out_menuitem"
         android:title="@string/sign_out"
+        />
+    <item
+        android:id="@+id/sign_in_menuitem"
+        android:title="@string/sign_in"
         />
 </menu>
