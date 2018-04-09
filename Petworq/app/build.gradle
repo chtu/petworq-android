@@ -33,6 +33,7 @@ dependencies {
 
     // Firebase database
     compile 'com.google.firebase:firebase-database:11.8.0'
+    compile 'com.google.firebase:firebase-firestore:11.8.0'
 
     // Facebook
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
@@ -44,6 +45,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
+
 
 
 

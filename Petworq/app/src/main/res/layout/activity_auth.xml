@@ -6,17 +6,16 @@
     android:layout_height="match_parent"
     tools:context="com.petworq.petworq.AuthActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/activity_auth_data_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/sign_in_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/sign_in" />
+    <TextView
+        android:id="@+id/sign_in_status_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -4,6 +4,12 @@
     <string name="fb_login_protocol_scheme">fb167343297416735</string>
     <string name="sign_in">Sign In</string>
 
+    <string name="insert_handle_text">Insert the handle you would like:</string>
+    <string name="submit">Submit</string>
+    <string name="need_to_submit_handle">You still need to set up your handle.</string>
+    <string name="successfully_signed_in">You have successfully signed in.</string>
+    <string name="name_already_taken">That name was already taken.</string>
+
     <!-- Menu Items -->
     <string name="sign_out">Sign out</string>
     <string name="favorite">Favorite</string>

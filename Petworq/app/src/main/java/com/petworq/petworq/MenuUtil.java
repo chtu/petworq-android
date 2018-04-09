@@ -1,5 +1,6 @@
 package com.petworq.petworq;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -45,7 +46,7 @@ public class MenuUtil {
                 AuthUtil.signOut(context);
                 break;
             case (R.id.sign_in_menuitem):
-                AuthUtil.startSignInActivity(context);
+                context.startActivity(new Intent(context, AuthActivity.class));
                 break;
         }
 
