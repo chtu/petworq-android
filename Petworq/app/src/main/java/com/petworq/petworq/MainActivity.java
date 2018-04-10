@@ -168,6 +168,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case (R.id.sign_in_menuitem):
                 startActivity(new Intent(this, AuthActivity.class));
                 break;
+            case (R.id.friends_menuitem):
+                startActivity(new Intent(this, FriendsHubActivity.class));
         }
 
         return super.onOptionsItemSelected(item);

@@ -287,3 +287,9 @@ mDocRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
 });
 
  */
+
+
+/*
+data to set up
+- Automatically set up message 0
+ */

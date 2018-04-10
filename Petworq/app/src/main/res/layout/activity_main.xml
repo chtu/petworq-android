@@ -59,6 +59,12 @@
                 android:layout_height="wrap_content"
                 android:text="FIND AN EXISTING GROUP"/>
 
+            <Button
+                android:id="@+id/find_friends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FIND YOUR FRIENDS"/>
+
         </LinearLayout>
 
     </LinearLayout>

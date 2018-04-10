@@ -49,6 +49,9 @@ public class MenuUtil {
             case (R.id.sign_in_menuitem):
                 context.startActivity(new Intent(context, AuthActivity.class));
                 break;
+            case (R.id.friends_menuitem):
+                context.startActivity(new Intent(context, FriendsHubActivity.class));
+                break;
         }
     }
 }

@@ -27,8 +27,6 @@ public class AuthUtil {
     private static final String TAG = "AuthUtil";
     private static final int RC_SIGN_IN = 123;
 
-    private static boolean sTempBool;
-
     public static void signOut(AppCompatActivity context) {
         AuthUI.getInstance()
                 .signOut(context)
@@ -56,11 +54,6 @@ public class AuthUtil {
         return getUser().getDisplayName();
     }
 
-    public static void finishIfSignedOut(AppCompatActivity context) {
-        if (!AuthUtil.userIsSignedIn())
-            context.finish();
-    }
-
     public static void checkDatabaseForUserData(final AppCompatActivity context) {
         DocumentReference userRef = FirebaseFirestore.getInstance().document("users/" + AuthUtil.getUser().getUid());
         final Intent intent = new Intent(context, StoreUserInfoActivity.class);
@@ -85,6 +78,11 @@ public class AuthUtil {
                 Log.d(TAG, logMsg + ": Error while searching the database.");
             }
         });
+    }
 
+    public static void finishActivityIfSignedOut(AppCompatActivity context) {
+        if (!AuthUtil.userIsSignedIn()) {
+            context.finish();
+        }
     }
 }
