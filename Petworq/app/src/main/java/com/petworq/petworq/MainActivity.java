@@ -1,34 +1,40 @@
 package com.petworq.petworq;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.text.Editable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, android.text.TextWatcher {
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, FirebaseAuth.AuthStateListener {
 
     private static final boolean AUTOMATICALLY_SIGN_OUT = false;
+    private static final int RC_SIGN_IN = 111;
+    private static final int RC_STORE_USER_INFO = 222;
 
     private TextView mGreetingTextView;
-    private TextView mHandleStatusTextView;
     private Button mSignInButton;
+    private LinearLayout mPreSignInLayout;
+    private LinearLayout mPostSignInLayoutNoGroups;
+
+    private FirebaseAuth mAuth;
+    private DocumentReference mUserDocRef;
 
     private static final String TAG = "MainActivity";
 
@@ -37,58 +43,99 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.petworq_toolbar);
-        this.setSupportActionBar(myToolbar);
+        // Set up the Toolbar
+        MenuUtil.setUpToolbar(this);
 
+        mAuth = FirebaseAuth.getInstance();
+
+        // Link up the views with our variables
         mGreetingTextView = (TextView) findViewById(R.id.greeting_textview);
         mSignInButton = (Button) findViewById(R.id.sign_in_button);
-        mHandleStatusTextView = (TextView) findViewById(R.id.main_activity_data_status);
+        mPreSignInLayout = (LinearLayout) findViewById(R.id.pre_sign_in_layout);
+        mPostSignInLayoutNoGroups = (LinearLayout) findViewById(R.id.post_sign_in_layout_no_groups);
 
+        // Set up the onClick listener for the sign in button
         mSignInButton.setOnClickListener(this);
-        mHandleStatusTextView.addTextChangedListener(this);
+
+        // Set up the AuthStateListener
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.addAuthStateListener(this);
+
 
         // If DEBUG is true, the user will be signed out at the beginning of the session.
         if (AUTOMATICALLY_SIGN_OUT)
             AuthUtil.signOut(this);
 
         // If this user isn't signed in, automatically start the process.
-        if (!AuthUtil.userIsSignedIn()) {
-            startActivity(new Intent(this, AuthActivity.class));
-        }
-        // If they are signed in, check to see if the document was created for them. If not, they probably
-        // exited the StoreUserInfoActivity before they created a handle. This makes sure they complete this
-        // process before they can continue.
-        else {
-            DocumentReference userRef = FirebaseFirestore.getInstance().document("users/" + AuthUtil.getUser().getUid());
-            userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if (!documentSnapshot.exists()) {
-                        mHandleStatusTextView.setText(AuthActivity.NEEDS_HANDLE);
-                    }
-                }
-            });
-
-        }
+        startActivityForResult(new Intent(this, AuthActivity.class), RC_SIGN_IN);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        if (AuthUtil.userIsSignedIn()) {
+            mUserDocRef = FirebaseFirestore.getInstance().document("users/" + AuthUtil.getUser().getUid());
+            mUserDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document != null && document.exists()) {
+                            Map<String, Object> data = document.getData();
+                            long numGroups = (Long) data.get(DataUtil.USERS_FIELD_NUM_GROUPS_JOINED);
+                            Log.d(TAG, "Retrived document data: " + numGroups);
+
+                            if (numGroups == 0) {
+                                switchToPostSignInNoGroupsLayout();
+                                // TODO: Create a new activity for creating a new petworq
+                            } else {
+                                // TODO: Specify what to do when the user is a member of any groups
+                            }
+
+                        } else {
+                            Log.d(TAG, "Document doesn't exist.");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+        }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        updateUI();
+    public void onAuthStateChanged(@NonNull FirebaseAuth auth) {
+        FirebaseUser user = auth.getCurrentUser();
+
+        if (user != null) {
+
+            mGreetingTextView.setText("LOADING");
+            mSignInButton.setVisibility(View.GONE);
+        } else {
+            mGreetingTextView.setText("You need to sign in to continue.");
+            mSignInButton.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case(R.id.sign_in_button):
-                startActivity(new Intent(this, AuthActivity.class));
+                startActivityForResult(new Intent(this, AuthActivity.class), RC_SIGN_IN);
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Result of the AuthActivity
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
+                Log.d(TAG, "User successfully signed in.");
+            } else {
+                Log.d(TAG, "User backed out of the AuthActivity.");
+            }
         }
     }
 
@@ -105,8 +152,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             MenuUtil.setSignedInMenu(menu);
         else
             MenuUtil.setSignedOutMenu(menu);
-
-        updateUI();
         return true;
     }
 
@@ -115,37 +160,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Handle action bar item clicks here. The action bar will automatically handle clicks on
         // Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
 
-        MenuUtil.performMenuItemAction(this, item);
-        updateUI();
+        switch (item.getItemId()) {
+            case (R.id.sign_out_menuitem):
+                AuthUtil.signOut(this);
+                switchToPreSignInLayout();
+                break;
+            case (R.id.sign_in_menuitem):
+                startActivity(new Intent(this, AuthActivity.class));
+                break;
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void updateUI() {
-        if (AuthUtil.userIsSignedIn()) {
-            mGreetingTextView.setText("Welcome back, " + AuthUtil.getName());
-            mSignInButton.setVisibility(View.GONE);
-        } else {
-            mGreetingTextView.setText(getString(R.string.greeting_message_to_not_signed_in) + "\n"
-                    + getString(R.string.sign_in_message));
-            mSignInButton.setVisibility(View.VISIBLE);
-        }
+    public void switchToPreSignInLayout() {
+        mPreSignInLayout.setVisibility(View.VISIBLE);
+        mPostSignInLayoutNoGroups.setVisibility(View.GONE);
     }
 
-
-    @Override
-    public void onTextChanged(CharSequence cs, int start, int count, int after) {
-        switch (mHandleStatusTextView.getText().toString()) {
-            case (AuthActivity.NEEDS_HANDLE):
-                startActivity(new Intent(this, StoreUserInfoActivity.class));
-                break;
-        }
-        mHandleStatusTextView.removeTextChangedListener(this);
+    public void switchToPostSignInNoGroupsLayout() {
+        mPreSignInLayout.setVisibility(View.GONE);
+        mPostSignInLayoutNoGroups.setVisibility(View.VISIBLE);
     }
-
-    @Override
-    public void beforeTextChanged(CharSequence cs, int start, int count, int after) { }
-    @Override
-    public void afterTextChanged(Editable s) {}
-
 }
+
+
+// TODO: Activity for friending others
+// TODO: Activity for inviting others to your petwork
+// TODO: Activity for setting up pet profiles
