@@ -84,6 +84,7 @@ public class AuthActivity extends AppCompatActivity {
         } else if (requestCode == RC_STORE_USER_INFO ){
             // This the final step. We can kill off the Activity.
             if (resultCode == RESULT_OK) {
+                setResult(RESULT_OK);
                 finish();
             } else {
                 Log.d(TAG, "onActivityResult, resultCode for StoreUserInfoActivity");

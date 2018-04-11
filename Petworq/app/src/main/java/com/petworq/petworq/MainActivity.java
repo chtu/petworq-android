@@ -9,28 +9,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.petworq.petworq.Authentication.AuthActivity;
 import com.petworq.petworq.Authentication.SignInFragment;
 import com.petworq.petworq.Toolbar.NotAuthenticatedToolbarFragment;
 import com.petworq.petworq.Toolbar.ToolbarFragment;
 import com.petworq.petworq.UtilityClasses.AuthUtil;
-import com.petworq.petworq.UtilityClasses.DataUtil;
 import com.petworq.petworq.UtilityClasses.FragmentUtil;
 
-import java.util.Map;
-
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, FirebaseAuth.AuthStateListener {
+public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
 
     private static final String TAG = "MainActivity";
 
@@ -48,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mAuth = FirebaseAuth.getInstance();
 
         // Set up the AuthStateListener
         mAuth = FirebaseAuth.getInstance();
@@ -96,14 +84,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case(R.id.sign_in_button):
-                startActivityForResult(new Intent(this, AuthActivity.class), RC_SIGN_IN);
-                break;
-        }
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -116,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
-
+// TODO: Just removed onClick listener, see if that changes anything
 
     private void initializePage() {
         if (!AuthUtil.userIsSignedIn()) {

@@ -9,6 +9,11 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/messages_menuitem"
+        android:title="Messages"
+        />
+
+    <item
         android:id="@+id/friends_menuitem"
         android:title="@string/friends"
         />
