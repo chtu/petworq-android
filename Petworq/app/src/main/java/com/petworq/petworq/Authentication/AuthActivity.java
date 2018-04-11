@@ -1,4 +1,4 @@
-package com.petworq.petworq;
+package com.petworq.petworq.Authentication;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.petworq.petworq.R;
+import com.petworq.petworq.UtilityClasses.AuthUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,20 +28,17 @@ public class AuthActivity extends AppCompatActivity {
     );
 
 
-    private TextView mSignInStatusTextView;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "CreateActivity");
         setContentView(R.layout.activity_auth);
-
-        mSignInStatusTextView = (TextView) findViewById(R.id.sign_in_status_textview);
-
+        Log.d(TAG, "Set the layout of the activity.");
 
         if (!AuthUtil.userIsSignedIn()) {
             // Start the Firebase Auth Activity.
             // Update the status text views in onActivityResult
+            Log.d(TAG, "User not signed in. Beginning activity.");
             startActivityForResult(
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
@@ -86,6 +85,8 @@ public class AuthActivity extends AppCompatActivity {
             // This the final step. We can kill off the Activity.
             if (resultCode == RESULT_OK) {
                 finish();
+            } else {
+                Log.d(TAG, "onActivityResult, resultCode for StoreUserInfoActivity");
             }
         }
     }

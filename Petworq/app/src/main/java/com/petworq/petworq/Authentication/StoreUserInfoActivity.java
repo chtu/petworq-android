@@ -1,4 +1,4 @@
-package com.petworq.petworq;
+package com.petworq.petworq.Authentication;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +14,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.petworq.petworq.R;
+import com.petworq.petworq.UtilityClasses.AuthUtil;
+import com.petworq.petworq.UtilityClasses.DataUtil;
 
 public class StoreUserInfoActivity extends AppCompatActivity implements android.text.TextWatcher {
 
