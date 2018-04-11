@@ -1,5 +1,6 @@
-package com.petworq.petworq;
+package com.petworq.petworq.UtilityClasses;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -15,19 +16,16 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.petworq.petworq.Authentication.StoreUserInfoActivity;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static com.petworq.petworq.AuthActivity.RC_STORE_USER_INFO;
+import static com.petworq.petworq.Authentication.AuthActivity.RC_STORE_USER_INFO;
 
 
 public class AuthUtil {
 
     private static final String TAG = "AuthUtil";
-    private static final int RC_SIGN_IN = 123;
 
-    public static void signOut(AppCompatActivity context) {
+    public static void signOut(Context context) {
         AuthUI.getInstance()
                 .signOut(context)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -54,7 +52,8 @@ public class AuthUtil {
         return getUser().getDisplayName();
     }
 
-    public static void checkDatabaseForUserData(final AppCompatActivity context) {
+    public static void checkDatabaseForUserData(final Context context) {
+        final AppCompatActivity activityContext = (AppCompatActivity) context;
         DocumentReference userRef = FirebaseFirestore.getInstance().document("users/" + AuthUtil.getUser().getUid());
         final Intent intent = new Intent(context, StoreUserInfoActivity.class);
         final String logMsg = "onCreate; requestCode=" + RC_STORE_USER_INFO;
@@ -65,11 +64,11 @@ public class AuthUtil {
                 // If the user's data doesn't exist, we start a new Activity and address the result later
                 if (!documentSnapshot.exists()) {
                     Log.d(TAG, logMsg + ": ActivityForResult will start.");
-                    context.startActivityForResult(intent, RC_STORE_USER_INFO);
+                    activityContext.startActivityForResult(intent, RC_STORE_USER_INFO);
                     // If the user already has data in the system, there is nothing we need to do except kill the Activity.
                 } else {
                     Log.d(TAG, "Found user data. Killing Activity.");
-                    context.finish();
+                    activityContext.finish();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {

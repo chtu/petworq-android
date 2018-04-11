@@ -17,8 +17,4 @@
         android:id="@+id/sign_out_menuitem"
         android:title="@string/sign_out"
         />
-    <item
-        android:id="@+id/sign_in_menuitem"
-        android:title="@string/sign_in"
-        />
 </menu>

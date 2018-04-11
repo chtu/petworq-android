@@ -18,10 +18,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AuthActivity" />
-        <activity android:name=".StoreUserInfoActivity" />
-        <activity android:name=".GroupOptionsActivity" />
-        <activity android:name=".FriendsHubActivity"></activity>
+        <activity android:name=".Authentication.AuthActivity" />
+        <activity android:name=".Authentication.StoreUserInfoActivity" />
+
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

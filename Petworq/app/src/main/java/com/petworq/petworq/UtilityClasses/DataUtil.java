@@ -1,4 +1,4 @@
-package com.petworq.petworq;
+package com.petworq.petworq.UtilityClasses;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;

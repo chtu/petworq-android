@@ -22,4 +22,7 @@
     <string name="greeting_message_to_not_signed_in">welcome to petworq!</string>
     <string name="sign_in_message">you will have to sign in to continue.</string>
     <string name="you_signed_in">You signed in!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

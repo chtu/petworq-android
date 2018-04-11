@@ -11,61 +11,18 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar" />
-
-        <LinearLayout
-            android:id="@+id/pre_sign_in_layout"
+        <fragment
+            android:name="com.petworq.petworq.FragmentContainers.ToolbarContainerFragment"
+            android:id="@+id/fragment_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
+            android:layout_height="?attr/actionBarSize"
+            />
 
-
-            <TextView
-                android:id="@+id/greeting_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:id="@+id/sign_in_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sign_in" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/post_sign_in_layout_no_groups"
+        <fragment
+            android:name="com.petworq.petworq.FragmentContainers.ContentContainerFragment"
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-
-            <TextView
-                android:id="@+id/signed_in_no_groups_greeting_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="It looks like you aren't a member of any groups yet." />
-
-            <Button
-                android:id="@+id/create_new_group_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="CREATE A NEW GROUP"/>
-
-            <Button
-                android:id="@+id/find_existing_group_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="FIND AN EXISTING GROUP"/>
-
-            <Button
-                android:id="@+id/find_friends"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="FIND YOUR FRIENDS"/>
-
-        </LinearLayout>
+            android:layout_height="fill_parent" />
 
     </LinearLayout>
 
