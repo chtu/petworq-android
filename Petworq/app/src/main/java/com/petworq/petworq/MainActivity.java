@@ -26,6 +26,7 @@ import com.petworq.petworq.Toolbar.NotAuthenticatedToolbarFragment;
 import com.petworq.petworq.Toolbar.ToolbarFragment;
 import com.petworq.petworq.UtilityClasses.AuthUtil;
 import com.petworq.petworq.UtilityClasses.DataUtil;
+import com.petworq.petworq.UtilityClasses.FragmentUtil;
 
 import java.util.Map;
 
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final boolean AUTOMATICALLY_SIGN_OUT = true;
     private static final boolean AUTOMATICALLY_SIGN_IN = true;
+    private static final boolean DEBUG = false;
 
     private static final int RC_SIGN_IN = 111;
     private static final int RC_STORE_USER_INFO = 222;
@@ -53,84 +55,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuth = FirebaseAuth.getInstance();
         mAuth.addAuthStateListener(this);
 
-        if (!AuthUtil.userIsSignedIn()) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        initializePage();
 
-            NotAuthenticatedToolbarFragment notAuthToolbarFragment = new NotAuthenticatedToolbarFragment();
-            SignInFragment signInFragment = new SignInFragment();
+        if (DEBUG) {
+            // If DEBUG is true, the user will be signed out at the beginning of the session.
+            if (AUTOMATICALLY_SIGN_OUT)
+                AuthUtil.signOut(this);
 
-
-            fragmentTransaction.add(R.id.fragment_toolbar, notAuthToolbarFragment);
-            fragmentTransaction.add(R.id.fragment_container, signInFragment);
-            fragmentTransaction.commit();
+            // If this user isn't signed in, automatically start the process.
+            if (AUTOMATICALLY_SIGN_IN)
+                startActivityForResult(new Intent(this, AuthActivity.class), RC_SIGN_IN);
         }
-
-        // If DEBUG is true, the user will be signed out at the beginning of the session.
-        if (AUTOMATICALLY_SIGN_OUT)
-            AuthUtil.signOut(this);
-
-        // If this user isn't signed in, automatically start the process.
-        if (AUTOMATICALLY_SIGN_IN)
-            startActivityForResult(new Intent(this, AuthActivity.class), RC_SIGN_IN);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-/*
-        if (AuthUtil.userIsSignedIn()) {
-            mUserDocRef = FirebaseFirestore.getInstance().document("users/" + AuthUtil.getUser().getUid());
-            mUserDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document != null && document.exists()) {
-                            Map<String, Object> data = document.getData();
-                            long numGroups = (Long) data.get(DataUtil.USERS_FIELD_NUM_GROUPS_JOINED);
-                            Log.d(TAG, "Retrived document data: " + numGroups);
 
-                            if (numGroups == 0) {
-                                // TODO: Create a new activity for creating a new petworq
-                            } else {
-                                // TODO: Specify what to do when the user is a member of any groups
-                            }
+        if (AuthUtil.getUser() == null) {
+            NotAuthenticatedToolbarFragment newToolbarFragment = new NotAuthenticatedToolbarFragment();
+            SignInFragment newContentFragment = new SignInFragment();
 
-                        } else {
-                            Log.d(TAG, "Document doesn't exist.");
-                        }
-                    } else {
-                        Log.d(TAG, "get failed with ", task.getException());
-                    }
-                }
-            });
+            FragmentUtil.updateMainUi(newToolbarFragment, newContentFragment, this);
+        } else {
+            ToolbarFragment newToolbarFragment = new ToolbarFragment();
+            BaseOptionsFragment newContentFragment = new BaseOptionsFragment();
+
+            FragmentUtil.updateMainUi(newToolbarFragment, newContentFragment, this);
         }
-        */
     }
 
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth auth) {
         FirebaseUser user = auth.getCurrentUser();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
         if (user == null) {
             NotAuthenticatedToolbarFragment newToolbarFragment = new NotAuthenticatedToolbarFragment();
             SignInFragment newContentFragment = new SignInFragment();
-
-            fragmentTransaction.replace(R.id.fragment_toolbar, newToolbarFragment);
-            fragmentTransaction.replace(R.id.fragment_container, newContentFragment);
-        } else {
-            ToolbarFragment newToolbarFragment = new ToolbarFragment();
-            BaseOptionsFragment newContentFragment = new BaseOptionsFragment();
-
-            fragmentTransaction.replace(R.id.fragment_toolbar, newToolbarFragment);
-            fragmentTransaction.replace(R.id.fragment_container, newContentFragment);
+            FragmentUtil.updateMainUi(newToolbarFragment, newContentFragment, this);
         }
-
-        fragmentTransaction.commit();
     }
 
     @Override
@@ -154,6 +117,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
+    private void initializePage() {
+        if (!AuthUtil.userIsSignedIn()) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            NotAuthenticatedToolbarFragment notAuthToolbarFragment = new NotAuthenticatedToolbarFragment();
+            SignInFragment signInFragment = new SignInFragment();
+
+            fragmentTransaction.add(R.id.fragment_toolbar, notAuthToolbarFragment);
+            fragmentTransaction.add(R.id.fragment_container, signInFragment);
+            fragmentTransaction.commit();
+        } else {
+            startActivityForResult(new Intent(this, AuthActivity.class), RC_SIGN_IN);
+        }
+    }
 }
 
 
