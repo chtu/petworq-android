@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.petworq.petworq.FragmentContainers.ToolbarContainerFragment">
+    tools:context="com.petworq.androidapp.FragmentContainers.ToolbarContainerFragment">
 
     <!-- An empty fragment acting as a container -->
 

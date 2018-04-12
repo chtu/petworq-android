@@ -1,4 +1,4 @@
-package com.petworq.petworq;
+package com.petworq.androidapp;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

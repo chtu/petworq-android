@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.petworq.petworq.MainActivity">
+    tools:context="com.petworq.androidapp.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,14 +12,14 @@
         android:orientation="vertical">
 
         <fragment
-            android:name="com.petworq.petworq.FragmentContainers.ToolbarContainerFragment"
+            android:name="com.petworq.androidapp.FragmentContainers.ToolbarContainerFragment"
             android:id="@+id/fragment_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             />
 
         <fragment
-            android:name="com.petworq.petworq.FragmentContainers.ContentContainerFragment"
+            android:name="com.petworq.androidapp.FragmentContainers.ContentContainerFragment"
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
