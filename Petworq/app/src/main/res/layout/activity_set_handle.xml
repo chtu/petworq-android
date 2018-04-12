@@ -38,7 +38,7 @@
 
             <EditText
                 android:id="@+id/handle_edittext"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:inputType="textNoSuggestions"
                 android:digits="0123456789-_abcdefghijklmnopqrstuvwxyvABSDEFGHIJKLMNOPQRSTUVWXYZ"
