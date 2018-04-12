@@ -1,4 +1,4 @@
-package com.petworq.petworq;
+package com.petworq.androidapp;
 
 import org.junit.Test;
 

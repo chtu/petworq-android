@@ -1,4 +1,4 @@
-package com.petworq.petworq.Toolbar;
+package com.petworq.androidapp.Toolbar;
 
 
 import android.os.Bundle;
@@ -8,9 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.petworq.petworq.R;
+import com.petworq.androidapp.R;
 
 public class NotAuthenticatedToolbarFragment extends Fragment {
 

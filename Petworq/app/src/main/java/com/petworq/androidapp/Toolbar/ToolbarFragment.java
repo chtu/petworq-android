@@ -1,6 +1,5 @@
-package com.petworq.petworq.Toolbar;
+package com.petworq.androidapp.Toolbar;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,10 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.petworq.petworq.FriendsFragment;
-import com.petworq.petworq.MessagesFragment;
-import com.petworq.petworq.R;
-import com.petworq.petworq.UtilityClasses.AuthUtil;
+import com.petworq.androidapp.FriendsFragment;
+import com.petworq.androidapp.MessagesFragment;
+import com.petworq.androidapp.R;
+import com.petworq.androidapp.UtilityClasses.AuthUtil;
 
 
 public class ToolbarFragment extends Fragment {

@@ -1,4 +1,4 @@
-package com.petworq.petworq.FragmentContainers;
+package com.petworq.androidapp;
 
 
 import android.os.Bundle;
@@ -7,19 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.petworq.petworq.R;
 
-public class ContentContainerFragment extends Fragment {
+public class BaseOptionsFragment extends Fragment {
 
 
-    public ContentContainerFragment() {}
+    public BaseOptionsFragment() {}
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_content_container, container, false);
+        return inflater.inflate(R.layout.fragment_base_options, container, false);
     }
 
 }

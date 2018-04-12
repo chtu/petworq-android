@@ -1,17 +1,12 @@
-package com.petworq.petworq.UtilityClasses;
+package com.petworq.androidapp.UtilityClasses;
 
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-import com.petworq.petworq.Authentication.SignInFragment;
-import com.petworq.petworq.BaseOptionsFragment;
-import com.petworq.petworq.R;
-import com.petworq.petworq.Toolbar.NotAuthenticatedToolbarFragment;
-import com.petworq.petworq.Toolbar.ToolbarFragment;
+import com.petworq.androidapp.R;
 
 public class FragmentUtil {
 
