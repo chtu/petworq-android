@@ -9,6 +9,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.petworq.androidapp.R;
 import com.petworq.androidapp.UtilityClasses.AuthUtil;
+import com.petworq.androidapp.UtilityClasses.DataUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -83,6 +84,7 @@ public class AuthActivity extends AppCompatActivity {
         } else if (requestCode == RC_STORE_USER_INFO ){
             // This the final step. We can kill off the Activity.
             if (resultCode == RESULT_OK) {
+                DataUtil.updateUserDataInitializedToTrueInSharedPref(this, AuthUtil.getUid());
                 setResult(RESULT_OK);
                 finish();
             } else {

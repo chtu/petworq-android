@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    tools:context="com.petworq.androidapp.Toolbar.NotAuthenticatedToolbarFragment">
+    tools:context="com.petworq.androidapp.ToolbarFragments.UnauthenticatedToolbarFragment">
 
 
     <android.support.v7.widget.Toolbar

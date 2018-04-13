@@ -10,6 +10,12 @@
     <string name="successfully_signed_in">You have successfully signed in.</string>
     <string name="name_already_taken">That name was already taken.</string>
 
+    <!-- Toolbar Titles -->
+    <string name="settings_title">Settings</string>
+    <string name="messages_title">Messages</string>
+    <string name="tasks_title">Tasks</string>
+    <string name="friends_title">Friends</string>
+
     <!-- Menu Items -->
     <string name="sign_out">Sign out</string>
     <string name="favorite">Favorite</string>

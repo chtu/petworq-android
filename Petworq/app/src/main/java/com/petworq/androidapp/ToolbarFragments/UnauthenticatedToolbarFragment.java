@@ -1,4 +1,4 @@
-package com.petworq.androidapp.Toolbar;
+package com.petworq.androidapp.ToolbarFragments;
 
 
 import android.os.Bundle;
@@ -11,11 +11,11 @@ import android.view.ViewGroup;
 
 import com.petworq.androidapp.R;
 
-public class NotAuthenticatedToolbarFragment extends Fragment {
+public class UnauthenticatedToolbarFragment extends Fragment {
 
     private Toolbar mToolbar;
 
-    public NotAuthenticatedToolbarFragment() {}
+    public UnauthenticatedToolbarFragment() {}
 
 
     @Override

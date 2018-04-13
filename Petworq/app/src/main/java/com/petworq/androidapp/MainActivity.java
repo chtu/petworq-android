@@ -2,6 +2,7 @@ package com.petworq.androidapp;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -13,18 +14,21 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.petworq.androidapp.Authentication.AuthActivity;
 import com.petworq.androidapp.Authentication.SignInFragment;
-import com.petworq.androidapp.Toolbar.NotAuthenticatedToolbarFragment;
-import com.petworq.androidapp.Toolbar.ToolbarFragment;
+import com.petworq.androidapp.ContentFragments.BaseOptionsFragment;
+import com.petworq.androidapp.ToolbarFragments.UnauthenticatedToolbarFragment;
+import com.petworq.androidapp.ToolbarFragments.ToolbarFragment;
 import com.petworq.androidapp.UtilityClasses.AuthUtil;
+import com.petworq.androidapp.UtilityClasses.DataUtil;
 import com.petworq.androidapp.UtilityClasses.FragmentUtil;
 
 public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
 
     private static final String TAG = "MainActivity";
 
-    private static final boolean AUTOMATICALLY_SIGN_OUT = true;
-    private static final boolean AUTOMATICALLY_SIGN_IN = true;
-    private static final boolean DEBUG = false;
+    public static final boolean AUTOMATICALLY_SIGN_OUT = true;
+    public static final boolean AUTOMATICALLY_SIGN_IN = true;
+    public static final boolean DEBUG = false;
+    public static final boolean BACK_ALLOWED = false;
 
     private static final int RC_SIGN_IN = 111;
     private static final int RC_STORE_USER_INFO = 222;
@@ -59,15 +63,14 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         super.onStart();
 
         if (AuthUtil.getUser() == null) {
-            NotAuthenticatedToolbarFragment newToolbarFragment = new NotAuthenticatedToolbarFragment();
+            UnauthenticatedToolbarFragment newToolbarFragment = new UnauthenticatedToolbarFragment();
             SignInFragment newContentFragment = new SignInFragment();
 
             FragmentUtil.updateMainUi(newToolbarFragment, newContentFragment, this);
-        } else {
+        }
+        else {
             ToolbarFragment newToolbarFragment = new ToolbarFragment();
-            BaseOptionsFragment newContentFragment = new BaseOptionsFragment();
-
-            FragmentUtil.updateMainUi(newToolbarFragment, newContentFragment, this);
+            FragmentUtil.updateToolBar(newToolbarFragment, this);
         }
     }
 
@@ -76,7 +79,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         FirebaseUser user = auth.getCurrentUser();
 
         if (user == null) {
-            NotAuthenticatedToolbarFragment newToolbarFragment = new NotAuthenticatedToolbarFragment();
+            Log.d(TAG, "Changing layout to sign in page");
+            UnauthenticatedToolbarFragment newToolbarFragment = new UnauthenticatedToolbarFragment();
             SignInFragment newContentFragment = new SignInFragment();
             FragmentUtil.updateMainUi(newToolbarFragment, newContentFragment, this);
         }
@@ -94,21 +98,40 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
             }
         }
     }
-// TODO: Just removed onClick listener, see if that changes anything
+
 
     private void initializePage() {
         if (!AuthUtil.userIsSignedIn()) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            NotAuthenticatedToolbarFragment notAuthToolbarFragment = new NotAuthenticatedToolbarFragment();
+            UnauthenticatedToolbarFragment notAuthToolbarFragment = new UnauthenticatedToolbarFragment();
             SignInFragment signInFragment = new SignInFragment();
 
             fragmentTransaction.add(R.id.fragment_toolbar, notAuthToolbarFragment);
             fragmentTransaction.add(R.id.fragment_container, signInFragment);
             fragmentTransaction.commit();
         } else {
-            startActivityForResult(new Intent(this, AuthActivity.class), RC_SIGN_IN);
+            if (!DataUtil.userDataIsInitialized(this, AuthUtil.getUid())) {
+                startActivityForResult(new Intent(this, AuthActivity.class), RC_SIGN_IN);
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (BACK_ALLOWED) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
+
+            if (fragment != null && fragmentManager.getBackStackEntryCount() > 0) {
+                if (FragmentUtil.isMainFragment(fragment)) {
+                    fragmentManager.beginTransaction().detach(fragment).commit();
+                    super.onBackPressed();
+                }
+            }
+        } else {
+            moveTaskToBack(false);
         }
     }
 }

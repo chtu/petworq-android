@@ -1,6 +1,8 @@
 package com.petworq.androidapp.UtilityClasses;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -40,6 +42,11 @@ public class DataUtil {
     // Handles collection
     public static final String HANDLES_FIELD_USER_ID = "userId";
     public static final String HANDLES_FIELD_DATE_UPDATED = "dateUpdated";
+
+    // Keys for the SharedPreferences Files
+    public static final String USERS_THAT_DATA_IS_INITIALIZED_FILEKEY = "com.petworq.androidapp.USER_DATA_INITIALIZATION";
+    public static final int USER_DATA_NOT_INITIALIZED = 0;
+    public static final int USER_DATA_INITIALIZED = 1;
 
 
     /**
@@ -267,6 +274,23 @@ public class DataUtil {
                 Log.d(TAG, logMsg + ": Error while searching the database.");
             }
         });
+    }
+
+
+    public static boolean userDataIsInitialized(Context context, String userId) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(USERS_THAT_DATA_IS_INITIALIZED_FILEKEY, Context.MODE_PRIVATE);
+        if (sharedPreferences.getInt(userId, USER_DATA_NOT_INITIALIZED) == USER_DATA_INITIALIZED)
+            return true;
+        else
+            return false;
+    }
+
+    public static void updateUserDataInitializedToTrueInSharedPref(Context context, String userId) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(USERS_THAT_DATA_IS_INITIALIZED_FILEKEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt(userId, USER_DATA_INITIALIZED);
+        editor.commit();
     }
 }
 
