@@ -12,8 +12,9 @@ import android.widget.Button;
 import com.bluelinelabs.conductor.Controller;
 import com.petworq.androidapp.authentication.AuthActivity;
 import com.petworq.androidapp.R;
+import com.petworq.androidapp.views.SignInView;
 
-public class SignInController extends Controller implements View.OnClickListener {
+public class SignInController extends Controller {
 
     private static final int RC_SIGN_IN = 123;
 
@@ -24,10 +25,11 @@ public class SignInController extends Controller implements View.OnClickListener
 
     @Override
     protected View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container) {
-        View view = inflater.inflate(R.layout.view_sign_in, container, false);
-        return view;
+        SignInView signInView = (SignInView) inflater.inflate(R.layout.view_sign_in, container, false);
+        return signInView;
     }
 
+    /*
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -37,4 +39,6 @@ public class SignInController extends Controller implements View.OnClickListener
                 break;
         }
     }
+
+    */
 }
