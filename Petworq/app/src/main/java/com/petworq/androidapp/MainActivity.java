@@ -18,9 +18,15 @@ import com.petworq.androidapp.Authentication.AuthActivity;
 import com.petworq.androidapp.UtilityClasses.AuthUtil;
 import com.petworq.androidapp.controllers.SignInController;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.Component;
+import dagger.Module;
+import dagger.android.AndroidInjector;
 
+@Module
 public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
 
     private static final String TAG = "MainActivity";
@@ -51,14 +57,12 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         mRouter = Conductor.attachRouter(this, container, savedInstanceState);
 
         if (!mRouter.hasRootController()) {
-            mRouter.setRoot(RouterTransaction.with(new SignInController()));
+            mRouter.setRoot(RouterTransaction.with(new SignInController(null)));
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.sign_in);
         setSupportActionBar(toolbar);
-
-
 
         // Set up the AuthStateListener
         mAuth = FirebaseAuth.getInstance();
@@ -154,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
             super.onBackPressed();
         }
     }
+
 }
 
 

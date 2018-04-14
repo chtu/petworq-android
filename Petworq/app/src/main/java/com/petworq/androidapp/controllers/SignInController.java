@@ -1,20 +1,27 @@
 package com.petworq.androidapp.controllers;
 
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bluelinelabs.conductor.Controller;
 import com.petworq.androidapp.R;
+import com.petworq.androidapp.controllers.base.BaseController;
 import com.petworq.androidapp.views.SignInView;
 
-public class SignInController extends Controller {
+import javax.inject.Inject;
+
+public class SignInController extends BaseController {
 
     private static final int RC_SIGN_IN = 123;
 
-    public SignInController() {}
+    public SignInController(Bundle args) {
+        super(args);
+    }
 
 
     @Override
@@ -23,16 +30,9 @@ public class SignInController extends Controller {
         return signInView;
     }
 
-    /*
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case(R.id.sign_in_button):
-                AppCompatActivity activity = (AppCompatActivity) getActivity();
-                activity.startActivity(new Intent(activity, AuthActivity.class));
-                break;
-        }
+    public String getTitle() {
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        return activity.getString(R.string.sign_in);
     }
-
-    */
 }
