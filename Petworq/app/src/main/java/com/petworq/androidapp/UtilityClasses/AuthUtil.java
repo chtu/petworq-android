@@ -16,9 +16,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.petworq.androidapp.authentication.StoreUserInfoActivity;
+import com.petworq.androidapp.Authentication.StoreUserInfoActivity;
 
-import static com.petworq.androidapp.authentication.AuthActivity.RC_STORE_USER_INFO;
+import static com.petworq.androidapp.Authentication.AuthActivity.RC_STORE_USER_INFO;
 
 
 public class AuthUtil {

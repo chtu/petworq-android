@@ -20,8 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.petworq.androidapp.authentication.AuthActivity" />
-        <activity android:name="com.petworq.androidapp.authentication.StoreUserInfoActivity" />
+        <activity android:name="com.petworq.androidapp.Authentication.AuthActivity" />
+        <activity android:name="com.petworq.androidapp.Authentication.StoreUserInfoActivity" />
 
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

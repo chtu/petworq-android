@@ -14,7 +14,7 @@ import com.bluelinelabs.conductor.Router;
 import com.bluelinelabs.conductor.RouterTransaction;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
-import com.petworq.androidapp.authentication.AuthActivity;
+import com.petworq.androidapp.Authentication.AuthActivity;
 import com.petworq.androidapp.UtilityClasses.AuthUtil;
 import com.petworq.androidapp.controllers.SignInController;
 

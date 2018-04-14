@@ -1,4 +1,4 @@
-package com.petworq.androidapp.authentication;
+package com.petworq.androidapp.Authentication;
 
 import android.content.Intent;
 import android.os.Bundle;

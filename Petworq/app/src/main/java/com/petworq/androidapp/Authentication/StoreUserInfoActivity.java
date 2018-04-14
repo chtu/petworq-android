@@ -1,4 +1,4 @@
-package com.petworq.androidapp.authentication;
+package com.petworq.androidapp.Authentication;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
