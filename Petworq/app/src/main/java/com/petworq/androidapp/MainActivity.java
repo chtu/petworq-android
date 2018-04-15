@@ -7,24 +7,26 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.bluelinelabs.conductor.Conductor;
 import com.bluelinelabs.conductor.Router;
 import com.bluelinelabs.conductor.RouterTransaction;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.petworq.androidapp.Authentication.AuthActivity;
+import com.petworq.androidapp.UtilityClasses.AppUtil;
 import com.petworq.androidapp.UtilityClasses.AuthUtil;
+import com.petworq.androidapp.controllers.BaseOptionsController;
 import com.petworq.androidapp.controllers.SignInController;
-
-import javax.inject.Inject;
+import com.petworq.androidapp.listeners.NavigationBarListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import dagger.Component;
 import dagger.Module;
-import dagger.android.AndroidInjector;
 
 @Module
 public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
@@ -40,9 +42,14 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     private static final int RC_STORE_USER_INFO = 222;
 
     private Router mRouter;
+    private boolean mLastSignInStatus;
+    private NavigationBarListener mNavigationBarListener;
 
     @BindView(R.id.controller_container)
     ViewGroup container;
+
+    @BindView(R.id.toolbar)
+    Toolbar navigationBar;
 
     private FirebaseAuth mAuth;
     private DocumentReference mUserDocRef;
@@ -51,18 +58,33 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        AppUtil.setMainActivity(this);
         ButterKnife.bind(this);
+
 
         mRouter = Conductor.attachRouter(this, container, savedInstanceState);
 
+        AppComponent appComponent = DaggerAppComponent.create();
+        AppTool appTool = appComponent.getAppTool();
+
+        appTool.setContext(this);
+        appTool.setToolbar(navigationBar);
+
         if (!mRouter.hasRootController()) {
-            mRouter.setRoot(RouterTransaction.with(new SignInController(null)));
+            if (!AuthUtil.userIsSignedIn()) {
+                mRouter.setRoot(RouterTransaction.with(new SignInController(null)));
+                mLastSignInStatus = false;
+            } else {
+                mRouter.setRoot(RouterTransaction.with(new BaseOptionsController(appTool, null)));
+                mLastSignInStatus = true;
+                navigationBar.setVisibility(View.VISIBLE);
+            }
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.sign_in);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(navigationBar);
+
+        mNavigationBarListener = new NavigationBarListener(this, mRouter, appTool);
+        navigationBar.setOnMenuItemClickListener(mNavigationBarListener);
 
         // Set up the AuthStateListener
         mAuth = FirebaseAuth.getInstance();
@@ -90,34 +112,30 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     @Override
     protected void onStart() {
         super.onStart();
-        /*
-
-        if (AuthUtil.getUser() == null) {
-            UnauthToolbarController newToolbarFragment = new UnauthToolbarController();
-            SignInFragment newContentFragment = new SignInFragment();
-
-            FragmentUtil.updateMainUi(newToolbarFragment, newContentFragment, this);
+        if (AuthUtil.userIsSignedIn() && !mLastSignInStatus) {
+            mRouter.setRoot(RouterTransaction.with(new BaseOptionsController(null)));
+            navigationBar.setVisibility(View.VISIBLE);
+            mLastSignInStatus = true;
         }
-        else {
-            ToolbarFragment newToolbarFragment = new ToolbarFragment();
-            FragmentUtil.updateToolBar(newToolbarFragment, this);
+        if (!AuthUtil.userIsSignedIn() && mLastSignInStatus) {
+            mRouter.setRoot(RouterTransaction.with(new SignInController(null)));
+            navigationBar.setVisibility(View.GONE);
+            mLastSignInStatus = false;
         }
-        */
     }
 
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth auth) {
-        /*
         FirebaseUser user = auth.getCurrentUser();
 
         if (user == null) {
-            Log.d(TAG, "Changing layout to sign in page");
-            UnauthToolbarController newToolbarFragment = new UnauthToolbarController();
-            SignInFragment newContentFragment = new SignInFragment();
-            FragmentUtil.updateMainUi(newToolbarFragment, newContentFragment, this);
+            mRouter.setRoot(RouterTransaction.with(new SignInController(null)));
+            navigationBar.setVisibility(View.GONE);
+            mLastSignInStatus = false;
         }
-        */
     }
+
+
 
 
     @Override
@@ -132,25 +150,10 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         }
     }
 
-/*
-    private void initializePage() {
-        if (!AuthUtil.userIsSignedIn()) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-            UnauthToolbarController notAuthToolbarFragment = new UnauthToolbarController();
-            SignInFragment signInFragment = new SignInFragment();
-
-            fragmentTransaction.add(R.id.fragment_toolbar, notAuthToolbarFragment);
-            fragmentTransaction.add(R.id.fragment_container, signInFragment);
-            fragmentTransaction.commit();
-        } else {
-            if (!DataUtil.userDataIsInitialized(this, AuthUtil.getUid())) {
-                startActivityForResult(new Intent(this, AuthActivity.class), RC_SIGN_IN);
-            }
-        }
+    private void initUi() {
     }
-    */
+
+
 
     @Override
     public void onBackPressed() {

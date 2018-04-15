@@ -26,6 +26,10 @@ import java.util.Map;
 public class DataUtil {
 
     private static final String TAG = "DataUtil";
+    public static final String SUCCESS_TAG = ": success";
+    public static final String FAILURE_TAG = ": failure";
+
+
     public static final int HANDLE_LENGTH_MIN = 3;
     public static final int HANDLE_LENGTH_MAX = 20;
 
@@ -33,55 +37,68 @@ public class DataUtil {
     public static final int ACTIVITY_FOR_RESULT = 222;
 
     // Users collection
-    public static final String USERS_FIELD_FULL_NAME = "fullName";
+    public static final String USERS_FIELD_DISPLAY_NAME = "fullName";
     public static final String USERS_FIELD_DATE_CREATED = "dateCreated";
     public static final String USERS_FIELD_HANDLE = "handle";
-    public static final String USERS_FIELD_NUM_GROUPS_JOINED = "numberOfGroupsJoined";
     public static final String USERS_FIELD_EMAIL = "email";
 
     // Handles collection
     public static final String HANDLES_FIELD_USER_ID = "userId";
     public static final String HANDLES_FIELD_DATE_UPDATED = "dateUpdated";
+    public static final String HANDLES_FIELD_PHOTO_URI = "photoUri";
+    public static final String HANDLES_FIELD_DISPLAY_NAME = "displayName";
+    public static final String HANDLES_FIELD_NORMAL_CASE_HANDLE = "normalCaseHandle";
+
+    // social / USERID / pendingRequests collection
+    public static final String PR_FIELD_DATETIME_SENT = "datetimeSent";
+
+    // social / USERID / friends collection
+    public static final String FRIENDS_FIELD_DATETIME_ADDED = "datetimeAdded";
 
     // Keys for the SharedPreferences Files
     public static final String USERS_THAT_DATA_IS_INITIALIZED_FILEKEY = "com.petworq.androidapp.USER_DATA_INITIALIZATION";
     public static final int USER_DATA_NOT_INITIALIZED = 0;
     public static final int USER_DATA_INITIALIZED = 1;
 
+    // USERS DATA
+    public static final String USERS_COLL = "users";
+
+    // HANDLES DATA
+    public static final String HANDLES_COLL = "handles";
+
+    // SOCIAL DATA
+    public static final String SOCIAL_COLL = "social";
+    public static final String PENDING_REQ_COLL = "pendingRequests";
+    public static final String FRIENDS_COLL = "friends";
+
+    //
+    public static final String EMPTY_COLL_DOC_NAME = "0000000_empty_collection_0000000";
+
 
     /**
      * Pushes the user data to the "users" collection, with each document identified by the unique user id.
      * @param userId        The user's unique ID number as given by FirebaseAuth.
-     * @param fullName      The user's full name as given by FirebaseAuth.
+     * @param displayName      The user's full name as given by FirebaseAuth.
      * @param handle        The user's chosen handle.
      */
     public static void addUserToDatabase(
-            String userId,
-            String fullName,
-            String handle,
-            String email ) {
+            final String userId,
+            final String displayName,
+            final String handle,
+            final String email ) {
         // Get the document reference for the user id
-        DocumentReference docRef = FirebaseFirestore.getInstance().document("users/" + userId);
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection(USERS_COLL).document(userId);
+        final String logMsg = "Addition of user " + displayName + " " + userId + " to users collection.";
 
         // Create the map
         Map<String, Object> newMap = new HashMap<String, Object>();
-        newMap.put(USERS_FIELD_FULL_NAME, fullName);
+        newMap.put(USERS_FIELD_DISPLAY_NAME, displayName);
         newMap.put(USERS_FIELD_HANDLE, handle);
         newMap.put(USERS_FIELD_DATE_CREATED, getCurrentTime() );
-        newMap.put(USERS_FIELD_NUM_GROUPS_JOINED, 0);
         newMap.put(USERS_FIELD_EMAIL, email);
 
         // Push the map to the database
-        docRef.set(newMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isComplete()) {
-                    Log.d(TAG, "Successfully uploaded a new 'users' document.");
-                } else {
-                    // error handling here
-                }
-            }
-        });
+        setDocRef(docRef, newMap, logMsg);
     }
 
     /**
@@ -92,28 +109,175 @@ public class DataUtil {
      * @param userId        The user's unique ID number as given by FirebaseAuth.
      */
     public static void addHandleToDatabase(
-            String handle,
-            String userId ) {
+            final String handle,
+            final String userId,
+            final String displayName ) {
         // Get the document reference for the handle
-        DocumentReference docRef = FirebaseFirestore.getInstance().document("handles/" + handle.toLowerCase());
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection(HANDLES_COLL).document(handle.toLowerCase());
+        final String logMsg = "Setting handle, " + handle + ", for user " + userId;
 
         // Create the map for the data
         Map<String, Object> newMap = new HashMap<String, Object>();
         newMap.put(HANDLES_FIELD_USER_ID, userId);
         newMap.put(HANDLES_FIELD_DATE_UPDATED, getCurrentTime());
+        newMap.put(HANDLES_FIELD_DISPLAY_NAME, displayName);
+        newMap.put(HANDLES_FIELD_NORMAL_CASE_HANDLE, handle);
 
         // Push the map to the database.
-        docRef.set(newMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+        setDocRef(docRef, newMap, logMsg);
+    }
+
+    public static void deleteHandleFromDatabase( final String handle ) {
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection(HANDLES_COLL).document(handle.toLowerCase());
+        final String logMsg = "Deletion of handle, " + handle + ", from the database";
+        deleteDocRef(docRef, logMsg);
+    }
+
+    public static void updateHandleInUsersCollection(
+            final String userId,
+            final String handle ) {
+        final DocumentReference docRef = FirebaseFirestore.getInstance().collection(USERS_COLL).document(userId);
+        final String logMsg1 = "Retreiving existing data for user " + userId;
+
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isComplete()) {
-                    Log.d(TAG, "Successfully uploaded a new 'handles' document.");
-                } else {
-                    // error handling here
-                }
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    Log.d(TAG, logMsg1 + SUCCESS_TAG);
+                    Map<String, Object> map = documentSnapshot.getData();
+                    final String logMsg2 = "Updating user handle to " + handle;
+                    map.put(USERS_FIELD_HANDLE, handle);
+                    setDocRef(docRef, map, logMsg2);
+                } else
+                    Log.d(TAG, logMsg1 + ": File did not exist.");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, logMsg1 + FAILURE_TAG + ": " + e.getMessage());
             }
         });
     }
+
+    public static void addPendingRequestFromSendingUserToReceivingUser(
+            final String sendingUserId,
+            final String receivingUserId,
+            final long datetimeSent ) {
+
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection(SOCIAL_COLL).document(receivingUserId)
+                .collection(PENDING_REQ_COLL).document(sendingUserId);
+        final String logMsg = "Addition of pending request from " + sendingUserId + " to " + receivingUserId;
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(PR_FIELD_DATETIME_SENT, datetimeSent);
+
+        setDocRef(docRef, map, logMsg);
+    }
+
+    public static void removePendingRequestFromSendingUserToReceivingUser(
+            final String sendingUserId,
+            final String receivingUserId,
+            final long datetimeSent ) {
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection(SOCIAL_COLL).document(receivingUserId)
+                .collection(PENDING_REQ_COLL).document(sendingUserId);
+        final String logMsg = "Deletion of pending request from " + sendingUserId + " to " + receivingUserId;
+
+        deleteDocRef(docRef, logMsg);
+    }
+
+    public static void initializePendingRequests(final String userId) {
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection(SOCIAL_COLL).document(userId)
+                .collection(PENDING_REQ_COLL).document(EMPTY_COLL_DOC_NAME);
+        final String logMsg = "Initialization of " + PENDING_REQ_COLL + " collection for user " + userId;
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(PR_FIELD_DATETIME_SENT, 0);
+
+        setDocRef(docRef, map, logMsg);
+    }
+
+
+    public static void initializeFriends(final String userId) {
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection(SOCIAL_COLL).document(userId)
+                .collection(FRIENDS_COLL).document(EMPTY_COLL_DOC_NAME);
+        final String logMsg = "Initialization of " + FRIENDS_COLL + " collection for user " + userId;
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(FRIENDS_FIELD_DATETIME_ADDED, 0);
+
+        setDocRef(docRef, map, logMsg);
+    }
+
+
+    public static void confirmPendingRequestBetweenTwoUsers(
+            final String userIdA,
+            final String userIdB,
+            final long datetimeAdded ) {
+        DocumentReference docRef1 = FirebaseFirestore.getInstance().collection(SOCIAL_COLL).document(userIdA).collection(FRIENDS_COLL).document(userIdB);
+        final String logMsg1 = "Addition of " + userIdB + " as a friend of " + userIdA;
+
+        DocumentReference docRef2 = FirebaseFirestore.getInstance().collection(SOCIAL_COLL).document(userIdB).collection(FRIENDS_COLL).document(userIdA);
+        final String logMsg2 = "Addition of " + userIdA + " as a friend of " + userIdB;
+
+        Map<String, Object> map1 = new HashMap<String, Object>();
+        map1.put(FRIENDS_FIELD_DATETIME_ADDED, datetimeAdded);
+
+        Map<String, Object> map2 = new HashMap<String, Object>();
+        map2.put(FRIENDS_FIELD_DATETIME_ADDED, datetimeAdded);
+
+        setDocRef(docRef1, map1, logMsg1);
+        setDocRef(docRef2, map2, logMsg2);
+    }
+
+    public static void removeFriendStatusBetweenTwoUsers(
+            final String userIdA,
+            final String userIdB ) {
+        DocumentReference docRef1 = FirebaseFirestore.getInstance().collection(SOCIAL_COLL).document(userIdA).collection(FRIENDS_COLL).document(userIdB);
+        final String logMsg1 = "Deletion of " + userIdB + " as a friend of " + userIdA;
+        DocumentReference docRef2 = FirebaseFirestore.getInstance().collection(SOCIAL_COLL).document(userIdB).collection(FRIENDS_COLL).document(userIdA);
+        final String logMsg2 = "Deletion of " + userIdA + " as a friend of " + userIdB;
+
+        deleteDocRef(docRef1, logMsg1);
+        deleteDocRef(docRef2, logMsg2);
+    }
+
+
+
+
+    // PRIVATE HELPER METHODS   --------------------------------------------------------------------
+
+    private static void setDocRef(
+            final DocumentReference docRef,
+            final Map<String, Object> map,
+            final String logMsg) {
+        docRef.set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful())
+                    Log.d(TAG, logMsg + SUCCESS_TAG);
+                else
+                    Log.e(TAG, logMsg + FAILURE_TAG);
+            }
+        });
+    }
+
+    private static void deleteDocRef(
+            final DocumentReference docRef,
+            final String logMsg) {
+        docRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful())
+                    Log.d(TAG, logMsg + SUCCESS_TAG);
+                else
+                    Log.e(TAG, logMsg + FAILURE_TAG);
+            }
+        });
+    }
+
+
+
+
 
     /**
      * Retrieves the current time.

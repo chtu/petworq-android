@@ -1,7 +1,5 @@
 package com.petworq.androidapp;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -10,11 +8,9 @@ import dagger.Provides;
  */
 
 @Module
-public class AppModule {
-
+public class FirebaseAuthenticationModule {
     @Provides
-    AppTool providesAppTool() {
-        return new AppToolImplementation();
+    AuthenticationTool providesAuthenticationTool() {
+        return new FirebaseAuthenticationTool();
     }
-
 }
