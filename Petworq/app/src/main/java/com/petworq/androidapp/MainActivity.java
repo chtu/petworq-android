@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     private Router mRouter;
     private boolean mLastSignInStatus;
     private NavigationBarListener mNavigationBarListener;
+    private AppTool mAppTool;
 
     @BindView(R.id.controller_container)
     ViewGroup container;
@@ -65,17 +66,17 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         mRouter = Conductor.attachRouter(this, container, savedInstanceState);
 
         AppComponent appComponent = DaggerAppComponent.create();
-        AppTool appTool = appComponent.getAppTool();
+        mAppTool = appComponent.getAppTool();
 
-        appTool.setContext(this);
-        appTool.setToolbar(navigationBar);
+        mAppTool.setContext(this);
+        mAppTool.setToolbar(navigationBar);
 
         if (!mRouter.hasRootController()) {
             if (!AuthUtil.userIsSignedIn()) {
-                mRouter.setRoot(RouterTransaction.with(new SignInController(null)));
+                mRouter.setRoot(RouterTransaction.with(new SignInController(mAppTool,null)));
                 mLastSignInStatus = false;
             } else {
-                mRouter.setRoot(RouterTransaction.with(new BaseOptionsController(appTool, null)));
+                mRouter.setRoot(RouterTransaction.with(new BaseOptionsController(mAppTool, null)));
                 mLastSignInStatus = true;
                 navigationBar.setVisibility(View.VISIBLE);
             }
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
         setSupportActionBar(navigationBar);
 
-        mNavigationBarListener = new NavigationBarListener(this, mRouter, appTool);
+        mNavigationBarListener = new NavigationBarListener(this, mRouter, mAppTool);
         navigationBar.setOnMenuItemClickListener(mNavigationBarListener);
 
         // Set up the AuthStateListener
@@ -113,12 +114,12 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     protected void onStart() {
         super.onStart();
         if (AuthUtil.userIsSignedIn() && !mLastSignInStatus) {
-            mRouter.setRoot(RouterTransaction.with(new BaseOptionsController(null)));
+            mRouter.setRoot(RouterTransaction.with(new BaseOptionsController(mAppTool,null)));
             navigationBar.setVisibility(View.VISIBLE);
             mLastSignInStatus = true;
         }
         if (!AuthUtil.userIsSignedIn() && mLastSignInStatus) {
-            mRouter.setRoot(RouterTransaction.with(new SignInController(null)));
+            mRouter.setRoot(RouterTransaction.with(new SignInController(mAppTool,null)));
             navigationBar.setVisibility(View.GONE);
             mLastSignInStatus = false;
         }
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         FirebaseUser user = auth.getCurrentUser();
 
         if (user == null) {
-            mRouter.setRoot(RouterTransaction.with(new SignInController(null)));
+            mRouter.setRoot(RouterTransaction.with(new SignInController(mAppTool,null)));
             navigationBar.setVisibility(View.GONE);
             mLastSignInStatus = false;
         }
