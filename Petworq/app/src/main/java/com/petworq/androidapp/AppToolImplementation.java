@@ -3,6 +3,8 @@ package com.petworq.androidapp;
 import android.content.Context;
 import android.support.v7.widget.Toolbar;
 
+import com.bluelinelabs.conductor.Router;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -14,6 +16,7 @@ import javax.inject.Singleton;
 public class AppToolImplementation implements AppTool {
     private Context mContext;
     private Toolbar mToolbar;
+    private Router mRouter;
 
     @Inject
     public AppToolImplementation() {}
@@ -26,6 +29,11 @@ public class AppToolImplementation implements AppTool {
         this.mToolbar = toolbar;
     }
 
+    @Override
+    public void setRouter(Router router) {
+        this.mRouter = router;
+    }
+
 
     public Context getContext() {
         return this.mContext;
@@ -34,5 +42,10 @@ public class AppToolImplementation implements AppTool {
 
     public Toolbar getToolbar() {
         return this.mToolbar;
+    }
+
+    @Override
+    public Router getRouter() {
+        return this.mRouter;
     }
 }
