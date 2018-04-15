@@ -24,17 +24,16 @@ public class NavigationBarListener implements Toolbar.OnMenuItemClickListener {
 
     private final static String TAG = "NavigationBarListener";
 
+    private final static int SIGN_IN = 0;
     private final static int FRIENDS = 1;
     private final static int SETTINGS = 2;
     private final static int BASE_OPTIONS = 3;
+    private final static int TASKS = 4;
+    private final static int NOTIFICATIONS = 4;
 
     private Context mContext;
     private Router mRouter;
     private AppTool mAppTool;
-
-    private FriendsController mFriendsController;
-    private BaseOptionsController mBaseOptionsController;
-    private SignInController mSignInController;
 
     private int mCurrentPage;
 
@@ -51,25 +50,39 @@ public class NavigationBarListener implements Toolbar.OnMenuItemClickListener {
 
             case (R.id.tasks_icon):
                 Log.d(TAG, "Tasks icon selected.");
+
+                if (mCurrentPage != TASKS) {
+
+                    mCurrentPage = TASKS;
+                }
                 return true;
 
             case (R.id.friends_menuitem):
                 Log.d(TAG, "Friends menu item selected.");
-                if (mFriendsController == null)
-                    mFriendsController = new FriendsController(mAppTool, null);
-                mRouter.pushController(RouterTransaction.with(mFriendsController));
+
+                if (mCurrentPage != FRIENDS) {
+                    mRouter.pushController(RouterTransaction.with(new FriendsController(mAppTool, null)));
+                    mCurrentPage = FRIENDS;
+                }
                 return true;
 
 
             case (R.id.sign_out_menuitem):
                 Log.d(TAG, "Sign out menu item selected.");
-                AuthenticationTool authTool = DaggerAuthenticationComponent.create().getAuthenticationTool();
-                authTool.signOut(mContext);
+
+                if (mCurrentPage != SIGN_IN) {
+                    AuthenticationTool authTool = DaggerAuthenticationComponent.create().getAuthenticationTool();
+                    authTool.signOut(mContext);
+                    mCurrentPage = SIGN_IN;
+                }
                 return true;
 
 
             case (R.id.settings_menuitem):
                 Log.d(TAG, "Settings menu item selected.");
+                if (mCurrentPage != SETTINGS) {
+                    mCurrentPage = SETTINGS;
+                }
                 return true;
 
 
