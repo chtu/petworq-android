@@ -73,7 +73,7 @@ public class StoreUserInfoActivity extends AppCompatActivity implements android.
                                 mValidationTextView.setText(getString(R.string.name_already_taken));
                             } else {
                                 DataUtil.addUserToDatabase(mUserId, fullName, handle, email);
-                                DataUtil.addHandleToDatabase(handle, mUserId);
+                                DataUtil.addHandleToDatabase(handle, mUserId, fullName);
                                 setResult(RESULT_OK);
                                 finish();
                             }
