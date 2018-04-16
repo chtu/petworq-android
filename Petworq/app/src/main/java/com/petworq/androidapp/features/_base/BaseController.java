@@ -32,7 +32,7 @@ public abstract class BaseController extends Controller {
     }
 
     protected void setTitle() {
-        mAppTool.getToolbar().setTitle(getTitle());
+        mAppTool.getNavBar().setTitle(getTitle());
     }
 
     abstract public String getTitle();
