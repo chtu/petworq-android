@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
         <activity
-            android:name="com.petworq.androidapp.MainActivity"
+            android:name="com.petworq.androidapp._main.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,8 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.petworq.androidapp.Authentication.AuthActivity" />
-        <activity android:name="com.petworq.androidapp.Authentication.StoreUserInfoActivity" />
+        <activity android:name="com.petworq.androidapp.features.authentication.AuthActivity" />
+        <activity android:name="com.petworq.androidapp.features.authentication.AuthActivity$StoreUserInfoActivity" />
 
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
