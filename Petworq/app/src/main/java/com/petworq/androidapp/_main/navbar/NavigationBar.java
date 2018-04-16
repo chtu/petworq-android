@@ -63,3 +63,5 @@ public class NavigationBar extends Toolbar {
         mBackStack = new Stack<Integer>();
     }
 }
+
+// TODO: change BackStack to PagesVisited. Change onPage to isCurrentPage
