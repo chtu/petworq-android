@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.Toolbar;
 
 import com.bluelinelabs.conductor.Router;
+import com.petworq.androidapp._main.navbar.NavigationBar;
 import com.petworq.androidapp.di.app.app_tool.AppTool;
 
 import javax.inject.Inject;
@@ -16,7 +17,7 @@ import javax.inject.Singleton;
 @Singleton
 public class AppToolImplementation implements AppTool {
     private Context mContext;
-    private Toolbar mToolbar;
+    private NavigationBar mNavBar;
     private Router mRouter;
 
     @Inject
@@ -26,8 +27,8 @@ public class AppToolImplementation implements AppTool {
         this.mContext = context;
     }
 
-    public void setToolbar(Toolbar toolbar) {
-        this.mToolbar = toolbar;
+    public void setNavBar(NavigationBar navBar) {
+        this.mNavBar = navBar;
     }
 
     @Override
@@ -41,8 +42,8 @@ public class AppToolImplementation implements AppTool {
     }
 
 
-    public Toolbar getToolbar() {
-        return this.mToolbar;
+    public NavigationBar getNavBar() {
+        return this.mNavBar;
     }
 
     @Override
