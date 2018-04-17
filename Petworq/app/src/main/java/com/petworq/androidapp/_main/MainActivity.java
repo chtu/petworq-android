@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                 mLastSignInStatus = false;
             } else {
                 mRouter.setRoot(RouterTransaction.with(new BaseOptionsController(mAppTool, null)));
-                navBar.pushToBackStack(NavigationBar.DEFAULT_PAGE);
+                navBar.pushToPagesVisited(NavigationBar.DEFAULT_PAGE);
                 mLastSignInStatus = true;
                 navBar.setVisibility(View.VISIBLE);
             }
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
             mRouter.setRoot(RouterTransaction.with(new BaseOptionsController(mAppTool,null)));
             navBar.setVisibility(View.VISIBLE);
             mLastSignInStatus = true;
-            navBar.pushToBackStack(NavigationBar.DEFAULT_PAGE);
+            navBar.pushToPagesVisited(NavigationBar.DEFAULT_PAGE);
         }
         if (!AuthUtil.userIsSignedIn() && mLastSignInStatus) {
             mRouter.setRoot(RouterTransaction.with(new SignInController(mAppTool,null)));
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         if (!mRouter.handleBack()) {
             super.onBackPressed();
         } else {
-            navBar.popBackStack();
+            navBar.popPagesVisited();
         }
     }
 
