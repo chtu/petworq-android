@@ -6,10 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.petworq.androidapp.R;
 import com.petworq.androidapp.di.app.app_tool.AppTool;
 import com.petworq.androidapp.features._base.BaseController;
 
 import bolts.Task;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by charlietuttle on 4/16/18.
@@ -17,6 +20,7 @@ import bolts.Task;
 
 public class TasksController extends BaseController {
 
+    private Unbinder mUnbinder;
 
     public TasksController (Bundle args) {
         super(args);
@@ -28,12 +32,15 @@ public class TasksController extends BaseController {
 
     @Override
     public String getTitle() {
-        return null;
+        return mAppTool.getContext().getString(R.string.tasks_title);
     }
+
 
     @NonNull
     @Override
     protected View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container) {
-        // TODO: set up the basic onCreateView stuff,
+        TasksView tasksView = (TasksView) inflater.inflate(R.layout.view_tasks, container, false);
+        mUnbinder = ButterKnife.bind(this, tasksView);
+        return tasksView;
     }
 }
