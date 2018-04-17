@@ -13,11 +13,12 @@ public class NavigationBar extends Toolbar {
     public final static int FRIENDS = 1;
     public final static int SETTINGS = 2;
     public final static int TASKS = 4;
-    public final static int NOTIFICATIONS = 4;
+    public final static int NOTIFICATIONS = 5;
+    public final static int MESSAGES = 6;
 
     public final static int DEFAULT_PAGE = TASKS;
 
-    private Stack<Integer> mBackStack;
+    private Stack<Integer> mPagesVisited;
 
     // CONSTRUCTORS
     public NavigationBar (Context context) {
@@ -36,32 +37,31 @@ public class NavigationBar extends Toolbar {
     }
 
     // Public methods
-    public boolean onPage(int newPageCode) {
-        int oldPageCode = mBackStack.peek();
+    public boolean isCurrentPage(int newPageCode) {
+        int oldPageCode = mPagesVisited.peek();
         if (oldPageCode == newPageCode)
             return true;
         else
             return false;
     }
 
-    public void pushToBackStack(int pageCode) {
-        mBackStack.push(pageCode);
+    public void pushToPagesVisited(int pageCode) {
+        mPagesVisited.push(pageCode);
     }
 
-    public int popBackStack() {
-        return mBackStack.pop();
+    public int popPagesVisited() {
+        return mPagesVisited.pop();
     }
 
-    public void clearBackStack() {
-        mBackStack.clear();
+    public void clearPagesVisited() {
+        mPagesVisited.clear();
     }
 
 
     // Private Helper Methods
 
     private void initPagesStack() {
-        mBackStack = new Stack<Integer>();
+        mPagesVisited = new Stack<Integer>();
     }
 }
 
-// TODO: change BackStack to PagesVisited. Change onPage to isCurrentPage
