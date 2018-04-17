@@ -47,14 +47,21 @@ public class NavigationBarListener implements Toolbar.OnMenuItemClickListener {
 
             case (R.id.tasks_icon):
                 Log.d(TAG, "Tasks icon selected.");
+
+                if (mNavBar.isCurrentPage((NavigationBar.TASKS))) {
+
+                }
+
                 return true;
 
             case (R.id.friends_menuitem):
                 Log.d(TAG, "Friends menu item selected.");
-                if (!mNavBar.onPage(NavigationBar.FRIENDS)) {
+
+                if (!mNavBar.isCurrentPage(NavigationBar.FRIENDS)) {
                     mRouter.pushController(RouterTransaction.with(new FriendsController(mAppTool, null)));
-                    mNavBar.pushToBackStack(NavigationBar.FRIENDS);
+                    mNavBar.pushToPagesVisited(NavigationBar.FRIENDS);
                 }
+
                 return true;
 
 
@@ -62,7 +69,7 @@ public class NavigationBarListener implements Toolbar.OnMenuItemClickListener {
                 Log.d(TAG, "Sign out menu item selected.");
                 AuthenticationTool authTool = DaggerAuthenticationComponent.create().getAuthenticationTool();
 
-                mNavBar.clearBackStack();
+                mNavBar.clearPagesVisited();
 
                 authTool.signOut(mContext);
                 return true;
@@ -70,6 +77,11 @@ public class NavigationBarListener implements Toolbar.OnMenuItemClickListener {
 
             case (R.id.settings_menuitem):
                 Log.d(TAG, "Settings menu item selected.");
+
+                if (mNavBar.isCurrentPage(NavigationBar.TASKS)) {
+
+                }
+
                 return true;
 
 
