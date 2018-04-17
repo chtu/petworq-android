@@ -49,7 +49,7 @@ public class NavigationBarListener implements Toolbar.OnMenuItemClickListener {
                 Log.d(TAG, "Tasks icon selected.");
 
                 if (mNavBar.isCurrentPage((NavigationBar.TASKS))) {
-
+                    mNavBar.pushToPagesVisited(NavigationBar.TASKS);
                 }
 
                 return true;
@@ -78,8 +78,8 @@ public class NavigationBarListener implements Toolbar.OnMenuItemClickListener {
             case (R.id.settings_menuitem):
                 Log.d(TAG, "Settings menu item selected.");
 
-                if (mNavBar.isCurrentPage(NavigationBar.TASKS)) {
-
+                if (mNavBar.isCurrentPage(NavigationBar.SETTINGS)) {
+                    mNavBar.pushToPagesVisited(NavigationBar.SETTINGS);
                 }
 
                 return true;
