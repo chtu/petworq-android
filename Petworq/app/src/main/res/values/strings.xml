@@ -30,6 +30,10 @@
     <string name="sign_in_message">you will have to sign in to continue.</string>
     <string name="you_signed_in">You signed in!</string>
 
+    <!-- Friends page -->
+    <string name="friends_searchbar_current">Current</string>
+    <string name="friends_searchbar_search">Search</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

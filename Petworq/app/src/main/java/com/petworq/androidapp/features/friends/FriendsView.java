@@ -21,9 +21,6 @@ public class FriendsView extends LinearLayout {
 
     private static String temp;
 
-    @BindView(R.id.friends_greeting_textview)
-    TextView friendsGreetingTextView;
-
     public FriendsView (Context context, @Nullable AttributeSet attributes) {
         super(context, attributes);
     }
