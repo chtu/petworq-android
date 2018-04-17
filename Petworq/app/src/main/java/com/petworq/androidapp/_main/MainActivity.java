@@ -16,6 +16,7 @@ import com.bluelinelabs.conductor.RouterTransaction;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.petworq.androidapp._main.navbar.NavigationBar;
 import com.petworq.androidapp.di.app.AppComponent;
 import com.petworq.androidapp.di.app.DaggerAppComponent;
 import com.petworq.androidapp.di.app.app_tool.AppTool;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     ViewGroup container;
 
     @BindView(R.id.toolbar)
-    Toolbar navigationBar;
+    NavigationBar navBar;
 
     private FirebaseAuth mAuth;
     private DocumentReference mUserDocRef;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         mAppTool = appComponent.getAppTool();
 
         mAppTool.setContext(this);
-        mAppTool.setToolbar(navigationBar);
+        mAppTool.setNavBar(navBar);
 
         if (!mRouter.hasRootController()) {
             if (!AuthUtil.userIsSignedIn()) {
@@ -80,21 +81,20 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                 mLastSignInStatus = false;
             } else {
                 mRouter.setRoot(RouterTransaction.with(new BaseOptionsController(mAppTool, null)));
+                navBar.pushToPagesVisited(NavigationBar.DEFAULT_PAGE);
                 mLastSignInStatus = true;
-                navigationBar.setVisibility(View.VISIBLE);
+                navBar.setVisibility(View.VISIBLE);
             }
         }
 
-        setSupportActionBar(navigationBar);
+        setSupportActionBar(navBar);
 
         mNavigationBarListener = new NavigationBarListener(this, mRouter, mAppTool);
-        navigationBar.setOnMenuItemClickListener(mNavigationBarListener);
+        navBar.setOnMenuItemClickListener(mNavigationBarListener);
 
         // Set up the AuthStateListener
         mAuth = FirebaseAuth.getInstance();
         mAuth.addAuthStateListener(this);
-
-        //initializePage();
 
         if (DEBUG) {
             // If DEBUG is true, the user will be signed out at the beginning of the session.
@@ -118,12 +118,13 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         super.onStart();
         if (AuthUtil.userIsSignedIn() && !mLastSignInStatus) {
             mRouter.setRoot(RouterTransaction.with(new BaseOptionsController(mAppTool,null)));
-            navigationBar.setVisibility(View.VISIBLE);
+            navBar.setVisibility(View.VISIBLE);
             mLastSignInStatus = true;
+            navBar.pushToPagesVisited(NavigationBar.DEFAULT_PAGE);
         }
         if (!AuthUtil.userIsSignedIn() && mLastSignInStatus) {
             mRouter.setRoot(RouterTransaction.with(new SignInController(mAppTool,null)));
-            navigationBar.setVisibility(View.GONE);
+            navBar.setVisibility(View.GONE);
             mLastSignInStatus = false;
         }
     }
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
         if (user == null) {
             mRouter.setRoot(RouterTransaction.with(new SignInController(mAppTool,null)));
-            navigationBar.setVisibility(View.GONE);
+            navBar.setVisibility(View.GONE);
             mLastSignInStatus = false;
         }
     }
@@ -163,6 +164,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     public void onBackPressed() {
         if (!mRouter.handleBack()) {
             super.onBackPressed();
+        } else {
+            navBar.popPagesVisited();
         }
     }
 

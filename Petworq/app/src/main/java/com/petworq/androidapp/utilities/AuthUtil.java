@@ -16,8 +16,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.petworq.androidapp.features.authentication.AuthActivity;
 import com.petworq.androidapp.features.authentication.StoreUserInfoActivity;
+import com.petworq.androidapp.utilities.data_utilities.DataUtil;
 
 import static com.petworq.androidapp.features.authentication.AuthActivity.RC_STORE_USER_INFO;
 

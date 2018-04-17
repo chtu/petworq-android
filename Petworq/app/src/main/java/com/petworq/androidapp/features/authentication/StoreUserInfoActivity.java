@@ -16,7 +16,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.petworq.androidapp.R;
 import com.petworq.androidapp.utilities.AuthUtil;
-import com.petworq.androidapp.utilities.DataUtil;
+import com.petworq.androidapp.utilities.data_utilities.DataUtil;
 
 /**
  * Created by charlietuttle on 4/16/18.

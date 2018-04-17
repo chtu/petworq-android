@@ -19,7 +19,7 @@ import butterknife.Unbinder;
 
 public class BaseOptionsController extends BaseController {
 
-    private Unbinder unbinder;
+    private Unbinder mUnbinder;
 
     public BaseOptionsController(Bundle args) {
         super(args);
@@ -33,7 +33,7 @@ public class BaseOptionsController extends BaseController {
     @Override
     protected View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container) {
         BaseOptionsView baseOptionsView = (BaseOptionsView) inflater.inflate(R.layout.view_base_options, container, false);
-        unbinder = ButterKnife.bind(this, baseOptionsView);
+        mUnbinder = ButterKnife.bind(this, baseOptionsView);
         return baseOptionsView;
     }
 
@@ -45,8 +45,8 @@ public class BaseOptionsController extends BaseController {
     @Override
     public void onDestroyView(View view) {
         super.onDestroyView(view);
-        unbinder.unbind();
-        unbinder = null;
+        mUnbinder.unbind();
+        mUnbinder = null;
     }
 
 
