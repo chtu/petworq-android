@@ -15,15 +15,19 @@
     <string name="messages_title">Messages</string>
     <string name="tasks_title">Tasks</string>
     <string name="friends_title">Friends</string>
+    <string name="add_friends_title">Add Friends</string>
     <string name="base_options_tite">Welcome Back!</string>
+    <string name="pending_request_title">Pending friend requests</string>
 
     <!-- Menu Items -->
     <string name="sign_out">Sign out</string>
     <string name="favorite">Favorite</string>
-    <string name="find_your_friends">Find your friends</string>
     <string name="friends">Friends</string>
+    <string name="add_friends_menuitem">Find your friends</string>
     <string name="settings">Settings</string>
     <string name="create_new_petworq">Create new petworq</string>
+    <string name="messages">Messages</string>
+    <string name="pending_friends">Pending friend requests</string>
 
     <!-- Greeting -->
     <string name="greeting_message_to_not_signed_in">welcome to petworq!</string>
@@ -34,6 +38,10 @@
     <string name="friends_searchbar_current">Current</string>
     <string name="friends_searchbar_search">Search</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Add Friends -->
+    <string name="search_friends_edittext_hint">Enter your friend\'s handle</string>
+    <string name="no_users_found_string">No users were found.</string>
+    <string name="that_is_your_handle">That is your user handle.</string>
+    <string name="send_friend_request">Send Friend Request</string>
+
 </resources>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.petworq.androidapp.features.friends.add_new_friends.AddFriendsView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <EditText
+        android:id="@+id/search_handle_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:digits="0123456789-_abcdefghijklmnopqrstuvwxyvABSDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:hint="@string/search_friends_edittext_hint"/>
+
+    <Button
+        android:id="@+id/search_friends_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/submit"/>
+
+    <LinearLayout
+        android:id="@+id/search_results"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/user_found_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/send_friend_request_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/send_friend_request"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/no_users_found_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/no_users_found_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_users_found_string"/>
+
+        <TextView
+            android:id="@+id/your_handle_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/that_is_your_handle"/>
+
+    </LinearLayout>
+
+
+</com.petworq.androidapp.features.friends.add_new_friends.AddFriendsView>

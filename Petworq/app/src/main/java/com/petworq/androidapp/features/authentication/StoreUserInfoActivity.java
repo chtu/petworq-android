@@ -77,8 +77,11 @@ public class StoreUserInfoActivity extends AppCompatActivity implements android.
                             if (documentSnapshot.exists()) {
                                 mValidationTextView.setText(getString(R.string.name_already_taken));
                             } else {
+                                DataUtil.initSocialCollection(mUserId);
                                 DataUtil.addUserToDatabase(mUserId, fullName, handle, email);
                                 DataUtil.addHandleToDatabase(handle, mUserId, fullName);
+                                DataUtil.initializePendingRequests(mUserId);
+                                DataUtil.initializeFriends(mUserId);
                                 setResult(RESULT_OK);
                                 finish();
                             }

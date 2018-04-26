@@ -12,6 +12,10 @@ import com.petworq.androidapp.R;
 import com.petworq.androidapp.di.authentication.DaggerAuthenticationComponent;
 import com.petworq.androidapp.di.authentication.authentication_tool.AuthenticationTool;
 import com.petworq.androidapp.features.friends.FriendsController;
+import com.petworq.androidapp.features.friends.add_new_friends.AddFriendsController;
+import com.petworq.androidapp.features.friends.pendingRequests.PendingFriendRequestsController;
+import com.petworq.androidapp.features.messages.MessagesController;
+import com.petworq.androidapp.features.settings.SettingsController;
 
 import java.util.Stack;
 
@@ -65,6 +69,17 @@ public class NavigationBarListener implements Toolbar.OnMenuItemClickListener {
                 return true;
 
 
+            case (R.id.messages_menuitem):
+                Log.d(TAG, "Messages menu item selected.");
+
+                if (!mNavBar.isCurrentPage(NavigationBar.MESSAGES)) {
+                    mRouter.pushController(RouterTransaction.with(new MessagesController(mAppTool, null)));
+                    mNavBar.pushToPagesVisited(NavigationBar.MESSAGES);
+                }
+
+                return true;
+
+
             case (R.id.sign_out_menuitem):
                 Log.d(TAG, "Sign out menu item selected.");
                 AuthenticationTool authTool = DaggerAuthenticationComponent.create().getAuthenticationTool();
@@ -78,12 +93,31 @@ public class NavigationBarListener implements Toolbar.OnMenuItemClickListener {
             case (R.id.settings_menuitem):
                 Log.d(TAG, "Settings menu item selected.");
 
-                if (mNavBar.isCurrentPage(NavigationBar.SETTINGS)) {
+                if (!mNavBar.isCurrentPage(NavigationBar.SETTINGS)) {
+                    mRouter.pushController(RouterTransaction.with(new SettingsController(mAppTool, null)));
                     mNavBar.pushToPagesVisited(NavigationBar.SETTINGS);
                 }
 
                 return true;
 
+
+            case (R.id.pending_friends_menuitem):
+                Log.d(TAG, "Pending requests menu item selected.");
+
+                if (!mNavBar.isCurrentPage(NavigationBar.PENDING_FRIEND_REQUESTS)) {
+                    mRouter.pushController(RouterTransaction.with(new PendingFriendRequestsController(mAppTool, null)));
+                    mNavBar.pushToPagesVisited(NavigationBar.PENDING_FRIEND_REQUESTS);
+                }
+                return true;
+
+            case (R.id.add_friends_menuitem):
+                Log.d(TAG, "Add friends menu item selected.");
+
+                if (!mNavBar.isCurrentPage(NavigationBar.ADD_FRIENDS)) {
+                    mRouter.pushController(RouterTransaction.with(new AddFriendsController(mAppTool, null)));
+                    mNavBar.pushToPagesVisited(NavigationBar.ADD_FRIENDS);
+                }
+                return true;
 
             default:
                 return false;

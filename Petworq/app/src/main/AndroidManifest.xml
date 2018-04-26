@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.petworq.androidapp.features.authentication.AuthActivity" />
-        <activity android:name="com.petworq.androidapp.features.authentication.AuthActivity$StoreUserInfoActivity" />
+        <activity android:name="com.petworq.androidapp.features.authentication.StoreUserInfoActivity" />
 
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

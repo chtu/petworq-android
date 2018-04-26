@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.petworq.androidapp._main.MainActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +55,9 @@ public class DataUtil {
 
     // social / USERID / friends collection
     public static final String FRIENDS_FIELD_DATETIME_ADDED = "datetimeAdded";
+
+    // social base field
+    public static final String SOCIAL_EXISTS_FIELD = "exists";
 
     // Keys for the SharedPreferences Files
     public static final String USERS_THAT_DATA_IS_INITIALIZED_FILEKEY = "com.petworq.androidapp.USER_DATA_INITIALIZATION";
@@ -183,6 +187,17 @@ public class DataUtil {
         final String logMsg = "Deletion of pending request from " + sendingUserId + " to " + receivingUserId;
 
         deleteDocRef(docRef, logMsg);
+    }
+
+    public static void initSocialCollection(final String userId) {
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection(SOCIAL_COLL)
+                .document(userId);
+        final String logMsg = "Initialization of " + SOCIAL_COLL + " collection for user " + userId;
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(SOCIAL_EXISTS_FIELD, "true");
+
+        setDocRef(docRef, map, logMsg);
     }
 
     public static void initializePendingRequests(final String userId) {

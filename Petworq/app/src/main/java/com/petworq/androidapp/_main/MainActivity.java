@@ -27,6 +27,7 @@ import com.petworq.androidapp.utilities.AuthUtil;
 import com.petworq.androidapp.features.tasks.with_no_groups_joined.BaseOptionsController;
 import com.petworq.androidapp.features.authentication.SignInController;
 import com.petworq.androidapp._main.navbar.NavigationBarListener;
+import com.petworq.androidapp.utilities.data_utilities.DataUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     public static final boolean AUTOMATICALLY_SIGN_IN = true;
     public static final boolean DEBUG = false;
     public static final boolean BACK_ALLOWED = false;
+    public static final boolean CHECK_SHARED_PREFS = false;
 
     private static final int RC_SIGN_IN = 111;
     private static final int RC_STORE_USER_INFO = 222;
@@ -104,6 +106,12 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
             // If this user isn't signed in, automatically start the process.
             if (AUTOMATICALLY_SIGN_IN)
                 startActivityForResult(new Intent(this, AuthActivity.class), RC_SIGN_IN);
+        }
+
+        if (AuthUtil.userIsSignedIn()) {
+            if (!DataUtil.userDataIsInitialized(this, AuthUtil.getUid())) {
+                startActivityForResult(new Intent(this, AuthActivity.class), RC_SIGN_IN);
+            }
         }
     }
 

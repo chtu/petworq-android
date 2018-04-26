@@ -38,6 +38,7 @@ public class FriendsController extends BaseController {
     protected View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container) {
         FriendsView friendsView = (FriendsView) inflater.inflate(R.layout.view_friends, container, false);
         unbinder = ButterKnife.bind(this, friendsView);
+
         return friendsView;
     }
 

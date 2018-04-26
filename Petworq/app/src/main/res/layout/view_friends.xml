@@ -7,27 +7,40 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+    <EditText
+        android:id="@+id/search_friends_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="70sp"
+        android:hint="Search friends"
+            />
+
     <LinearLayout
-        android:id="@+id/friends_navbar"
+        android:id="@+id/friend_request_linearlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <TextView
-            android:id="@+id/current_friends_button"
+            android:id="@+id/user_found_in_database_textview"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/friends_toolbar_currentfriends"
-            android:text="@string/friends_searchbar_current" />
+            />
 
-        <TextView
-            android:id="@+id/search_friends_button"
-            android:layout_width="300dp"
+        <Button
+            android:id="@+id/request_friend_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/friends_searchbar_search"/>
+            android:text="Send Friend Request"/>
 
     </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_friends_list"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 
 </com.petworq.androidapp.features.friends.FriendsView>
