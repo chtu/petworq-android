@@ -5,5 +5,12 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent" >
 
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    </LinearLayout>
 
 </com.petworq.androidapp.features.tasks.with_groups_joined.TasksView>

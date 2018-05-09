@@ -10,9 +10,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-            android:name="com.petworq.androidapp._main.MainActivity"
+            android:name="._main.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,11 +20,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.petworq.androidapp.features.authentication.AuthActivity" />
-        <activity android:name="com.petworq.androidapp.features.authentication.StoreUserInfoActivity" />
+        <activity android:name=".features.authentication.AuthActivity" />
+        <activity android:name=".features.authentication.StoreUserInfoActivity" />
 
-        <meta-data android:name="com.google.android.gms.version"
+        <meta-data
+            android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".features.groups.create_new_group.CreateNewGroupActivity" />
+        <activity android:name=".features.groups.manage_existing_group.InviteFriendsToGroupActivity" />
+        <activity android:name=".features.groups.manage_existing_group.ManageGroupsActivity" />
+        <activity android:name=".features.pets.AddPetActivity" />
+        <activity android:name=".features.tasks.schedules.CreateNewScheduleActivity"></activity>
+        <receiver android:name="._main.AlarmManager.OnAlarmReceive" />
     </application>
 
 </manifest>

@@ -1,6 +1,11 @@
 package com.petworq.androidapp._main;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.bluelinelabs.conductor.Conductor;
 import com.bluelinelabs.conductor.Router;
@@ -16,12 +22,14 @@ import com.bluelinelabs.conductor.RouterTransaction;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.petworq.androidapp._main.AlarmManager.OnAlarmReceive;
 import com.petworq.androidapp._main.navbar.NavigationBar;
 import com.petworq.androidapp.di.app.AppComponent;
 import com.petworq.androidapp.di.app.DaggerAppComponent;
 import com.petworq.androidapp.di.app.app_tool.AppTool;
 import com.petworq.androidapp.features.authentication.AuthActivity;
 import com.petworq.androidapp.R;
+import com.petworq.androidapp.features.tasks.with_groups_joined.TasksController;
 import com.petworq.androidapp.utilities.AppUtil;
 import com.petworq.androidapp.utilities.AuthUtil;
 import com.petworq.androidapp.features.tasks.with_no_groups_joined.BaseOptionsController;
@@ -38,9 +46,9 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     private static final String TAG = "MainActivity";
 
-    public static final boolean AUTOMATICALLY_SIGN_OUT = true;
-    public static final boolean AUTOMATICALLY_SIGN_IN = true;
-    public static final boolean DEBUG = false;
+    public static final boolean AUTOMATICALLY_SIGN_OUT = false;
+    public static final boolean AUTOMATICALLY_SIGN_IN = false;
+    public static final boolean DEBUG = true;
     public static final boolean BACK_ALLOWED = false;
     public static final boolean CHECK_SHARED_PREFS = false;
 
@@ -51,6 +59,11 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     private boolean mLastSignInStatus;
     private NavigationBarListener mNavigationBarListener;
     private AppTool mAppTool;
+
+    private final static String ALARM_FILENAME = "petworq.android.charlietuttle.csc780.ALARM_STATUS";
+    private final static String ALARM_STATUS_KEY = "alarmStatus";
+    private final int ALARM_SET_VAL = 1;
+    private final int DEFAULT_VAL = 0;
 
     @BindView(R.id.controller_container)
     ViewGroup container;
@@ -82,8 +95,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
                 mRouter.setRoot(RouterTransaction.with(new SignInController(mAppTool,null)));
                 mLastSignInStatus = false;
             } else {
-                mRouter.setRoot(RouterTransaction.with(new BaseOptionsController(mAppTool, null)));
-                navBar.pushToPagesVisited(NavigationBar.DEFAULT_PAGE);
+                mRouter.setRoot(RouterTransaction.with(new TasksController(mAppTool, null)));
+                navBar.pushToPagesVisited(NavigationBar.TASKS);
                 mLastSignInStatus = true;
                 navBar.setVisibility(View.VISIBLE);
             }
@@ -109,11 +122,15 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         }
 
         if (AuthUtil.userIsSignedIn()) {
-            if (!DataUtil.userDataIsInitialized(this, AuthUtil.getUid())) {
+            if (DEBUG || !DataUtil.userDataIsInitialized(this, AuthUtil.getUid())) {
                 startActivityForResult(new Intent(this, AuthActivity.class), RC_SIGN_IN);
             }
         }
+
+        setUpAlarmManager();
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -125,10 +142,10 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     protected void onStart() {
         super.onStart();
         if (AuthUtil.userIsSignedIn() && !mLastSignInStatus) {
-            mRouter.setRoot(RouterTransaction.with(new BaseOptionsController(mAppTool,null)));
+            mRouter.setRoot(RouterTransaction.with(new TasksController(mAppTool,null)));
             navBar.setVisibility(View.VISIBLE);
             mLastSignInStatus = true;
-            navBar.pushToPagesVisited(NavigationBar.DEFAULT_PAGE);
+            navBar.pushToPagesVisited(NavigationBar.TASKS);
         }
         if (!AuthUtil.userIsSignedIn() && mLastSignInStatus) {
             mRouter.setRoot(RouterTransaction.with(new SignInController(mAppTool,null)));
@@ -163,11 +180,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         }
     }
 
-    private void initUi() {
-    }
-
-
-
     @Override
     public void onBackPressed() {
         if (!mRouter.handleBack()) {
@@ -177,9 +189,43 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         }
     }
 
+
+    // ALARM MANAGER METHODS
+    // Sets up the alarm manager so that the tasks may update while the application is offline
+    // It runs every hour
+    private void setUpAlarmManager() {
+        if (!alarmManagerIsSet()) {
+            Log.d(TAG, "Setting up alarm manager.");
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            Intent intent = new Intent(getBaseContext(), OnAlarmReceive.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
+                    SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HOUR,
+                    AlarmManager.INTERVAL_HOUR, pendingIntent);
+
+            updateAlarmManagerSet();
+        }
+    }
+
+    // Checks our shared preferences to see if an alarm is already set.
+    private boolean alarmManagerIsSet() {
+        Log.d(TAG, "Checking alarm manager status.");
+        SharedPreferences sharedPref = this.getSharedPreferences(ALARM_FILENAME, Context.MODE_PRIVATE);
+        int status = sharedPref.getInt(ALARM_STATUS_KEY, DEFAULT_VAL);
+        if (status == ALARM_SET_VAL)
+            return true;
+        else
+            return false;
+    }
+
+    // Updates our shared preferences to show that the alarm is set.
+    private void updateAlarmManagerSet() {
+        Log.d(TAG, "Updating alarm manager status to true.");
+        SharedPreferences sharedPref = this.getSharedPreferences(ALARM_FILENAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(ALARM_STATUS_KEY, ALARM_SET_VAL);
+        editor.commit();
+    }
+
 }
-
-
-// TODO: Activity for friending others
-// TODO: Activity for inviting others to your petwork
-// TODO: Activity for setting up pet profiles

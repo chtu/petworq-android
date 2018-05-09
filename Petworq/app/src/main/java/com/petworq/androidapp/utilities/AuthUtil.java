@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.petworq.androidapp._main.MainActivity;
 import com.petworq.androidapp.features.authentication.StoreUserInfoActivity;
 import com.petworq.androidapp.utilities.data_utilities.DataUtil;
 
@@ -59,7 +60,7 @@ public class AuthUtil {
         final AppCompatActivity activityContext = (AppCompatActivity) context;
         final String userId = AuthUtil.getUid();
 
-        if (!DataUtil.userDataIsInitialized(context, userId)) {
+        if (MainActivity.DEBUG || !DataUtil.userDataIsInitialized(context, userId)) {
 
             DocumentReference userRef = FirebaseFirestore.getInstance().document("users/" + userId);
             final Intent intent = new Intent(context, StoreUserInfoActivity.class);

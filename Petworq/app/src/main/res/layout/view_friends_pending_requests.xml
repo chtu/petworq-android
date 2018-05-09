@@ -7,10 +7,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:text="PENDING REQUESTS"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/pending_friends_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </com.petworq.androidapp.features.friends.pendingRequests.PendingFriendRequestsView>

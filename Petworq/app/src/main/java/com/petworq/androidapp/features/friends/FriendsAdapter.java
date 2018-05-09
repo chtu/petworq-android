@@ -17,10 +17,15 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mTextView;
+        private  TextView mTextView;
+
         public ViewHolder(TextView v) {
             super(v);
             mTextView = v;
+        }
+
+        public void setTextView(String newText) {
+            mTextView.setText(newText);
         }
     }
 
@@ -42,8 +47,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(FriendsAdapter.ViewHolder holder, int position) {
-        holder.mTextView.setText(mDataset[position]);
+        holder.setTextView(mDataset[position]);
     }
+
+    // Private helper method for obtaining the
 
     @Override
     public int getItemCount() {

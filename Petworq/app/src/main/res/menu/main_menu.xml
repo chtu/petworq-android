@@ -17,6 +17,18 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/manage_existing_group_menuitem"
+        android:title="@string/manage_existing_groups_menu_title"
+        />
+    <item
+        android:id="@+id/pending_group_invitations_menuitem"
+        android:title="@string/pending_group_invitations_menu_title"
+        />
+    <item
+        android:id="@+id/create_new_group_menuitem"
+        android:title="@string/create_new_group_menu_title"
+        />
+    <item
         android:id="@+id/messages_menuitem"
         android:title="@string/messages"
         />

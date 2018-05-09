@@ -33,6 +33,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <TextView
+            android:id="@+id/user_id_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
         <Button
             android:id="@+id/send_friend_request_button"
             android:layout_width="wrap_content"
@@ -59,6 +65,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/that_is_your_handle"/>
+
+        <TextView
+            android:id="@+id/already_friend_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/already_friend"/>
+
+        <TextView
+            android:id="@+id/already_has_pending_request"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pending_request_already_exists"/>
 
     </LinearLayout>
 

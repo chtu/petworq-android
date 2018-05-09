@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.petworq.androidapp.features.groups.manage_existing_group.ManageGroupsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Manage groups activity"
+            />
+
+        <TextView
+            android:id="@+id/groupid_textview"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            />
+
+        <Button
+            android:id="@+id/invite_friend_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="30sp"
+            android:text="@string/invite_friend"
+            />
+
+        <Button
+            android:id="@+id/add_pet_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="30sp"
+            android:text="@string/add_pet"
+            />
+
+        <Button
+            android:id="@+id/add_new_schedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="30sp"
+            android:text="@string/create_schedule"
+            />
+
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

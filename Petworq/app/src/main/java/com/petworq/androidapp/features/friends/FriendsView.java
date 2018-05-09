@@ -25,7 +25,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.petworq.androidapp.R;
 import com.petworq.androidapp.utilities.AuthUtil;
+import com.petworq.androidapp.utilities.data_utilities.BaseDataUtil;
 import com.petworq.androidapp.utilities.data_utilities.DataUtil;
+import com.petworq.androidapp.utilities.data_utilities.social.SocialDu;
+import com.petworq.androidapp.utilities.data_utilities.social.friends.Social2FriendsDu;
 
 import java.util.ArrayList;
 
@@ -67,7 +70,7 @@ public class FriendsView extends LinearLayout implements TextWatcher {
         super(context, attributes);
         this.mContext = context;
         mDb = FirebaseFirestore.getInstance();
-        mFriendsColl = mDb.collection(DataUtil.SOCIAL_COLL).document(AuthUtil.getUid()).collection(DataUtil.FRIENDS_COLL);
+        mFriendsColl = mDb.collection(SocialDu.SOCIAL_COLL).document(AuthUtil.getUid()).collection(Social2FriendsDu.FRIENDS_COLL);
 
     }
 
@@ -165,7 +168,7 @@ public class FriendsView extends LinearLayout implements TextWatcher {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String handle = document.getId();
-                        if (!handle.equals(DataUtil.EMPTY_COLL_DOC_NAME)) {
+                        if (!handle.equals(BaseDataUtil.EMPTY_COLL_DOC_NAME)) {
                             Log.d(TAG, "Retrieving data: " + handle + " => " + document.getData());
                             friendsArrayList.add(handle);
                         }

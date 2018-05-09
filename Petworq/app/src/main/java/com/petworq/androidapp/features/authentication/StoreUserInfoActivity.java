@@ -17,6 +17,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.petworq.androidapp.R;
 import com.petworq.androidapp.utilities.AuthUtil;
 import com.petworq.androidapp.utilities.data_utilities.DataUtil;
+import com.petworq.androidapp.utilities.data_utilities.handles.HandlesDu;
+import com.petworq.androidapp.utilities.data_utilities.social.SocialDu;
+import com.petworq.androidapp.utilities.data_utilities.social.friends.Social2FriendsDu;
+import com.petworq.androidapp.utilities.data_utilities.social.groupInvitations.Social2GroupInvDu;
+import com.petworq.androidapp.utilities.data_utilities.social.groups.Social2GroupsDu;
+import com.petworq.androidapp.utilities.data_utilities.social.pendingRequests.Social2PendingReqDu;
+import com.petworq.androidapp.utilities.data_utilities.users.UsersDu;
 
 /**
  * Created by charlietuttle on 4/16/18.
@@ -77,11 +84,13 @@ public class StoreUserInfoActivity extends AppCompatActivity implements android.
                             if (documentSnapshot.exists()) {
                                 mValidationTextView.setText(getString(R.string.name_already_taken));
                             } else {
-                                DataUtil.initSocialCollection(mUserId);
-                                DataUtil.addUserToDatabase(mUserId, fullName, handle, email);
-                                DataUtil.addHandleToDatabase(handle, mUserId, fullName);
-                                DataUtil.initializePendingRequests(mUserId);
-                                DataUtil.initializeFriends(mUserId);
+                                SocialDu.initSocialCollection(mUserId, handle);
+                                Social2GroupsDu.initGroups(mUserId);
+                                Social2GroupInvDu.initGroupInvs();
+                                UsersDu.addUserToDatabase(mUserId, fullName, handle, email);
+                                HandlesDu.addHandleToDatabase(handle, mUserId, fullName);
+                                Social2PendingReqDu.initializePendingRequests(mUserId);
+                                Social2FriendsDu.initializeFriends(mUserId);
                                 setResult(RESULT_OK);
                                 finish();
                             }

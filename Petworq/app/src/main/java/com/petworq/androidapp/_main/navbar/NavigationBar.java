@@ -17,6 +17,9 @@ public class NavigationBar extends Toolbar {
     public final static int MESSAGES = 6;
     public final static int PENDING_FRIEND_REQUESTS = 7;
     public final static int ADD_FRIENDS = 8;
+    public final static int CREATE_NEW_GROUPS = 9;
+    public final static int MANAGE_EXISTING_GROUPS = 10;
+    public final static int PENDING_GROUP_INVITATIONS = 11;
 
     public final static int DEFAULT_PAGE = TASKS;
 
